@@ -5,3 +5,7 @@ __pycache__/
 *.jsonl
 logs/
 .DS_Store 
+# Ignore Python virtual environments
+.venv/
+venv/
+
