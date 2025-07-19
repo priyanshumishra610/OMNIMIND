@@ -7,6 +7,7 @@ Handles world modeling and simulation when real facts are insufficient.
 from typing import List, Dict, Any, Optional
 import logging
 import json
+from .symbolic_engine import SymbolicEngine
 
 logger = logging.getLogger(__name__)
 
@@ -92,3 +93,33 @@ class SimulationSandbox:
     def get_world_models(self) -> Dict[str, Any]:
         """Get available world models."""
         return self.world_models.copy() 
+
+class WorldSimulator:
+    """
+    Simulates hypothetical scenarios using symbolic logic and causal rules.
+    """
+    def __init__(self, rules: Optional[List[Dict[str, Any]]] = None):
+        self.engine = SymbolicEngine()
+        if rules:
+            for rule in rules:
+                self.engine.add_rule(rule)
+
+    def simulate(self, facts: Dict[str, Any], query: str) -> List[Dict[str, Any]]:
+        """
+        Given partial facts and a query, generate hypothetical scenarios.
+        Returns a list of scenario dicts with likelihood scores.
+        """
+        logger.info(f"Simulating scenarios for query: {query} with facts: {facts}")
+        scenarios = []
+        for hypothesis in self.engine.generate_hypotheses(facts, query):
+            result, trace = self.engine.infer({**facts, **hypothesis})
+            score = self.engine.score_scenario(result, trace)
+            scenarios.append({
+                "hypothesis": hypothesis,
+                "result": result,
+                "trace": trace,
+                "score": score
+            })
+        scenarios.sort(key=lambda x: x["score"], reverse=True)
+        logger.info(f"Generated {len(scenarios)} hypothetical scenarios.")
+        return scenarios 
