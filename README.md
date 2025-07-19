@@ -67,14 +67,23 @@ graph TD
 ### 🔑 **Core Loop**
 
 1️⃣ **Ingest** → Crawl trusted sources
+
 2️⃣ **Chunk & Embed** → Adaptive chunker + multi-embedding models
+
 3️⃣ **Hybrid Search** → Vector DB + KG for ultra-relevant recall
+
 4️⃣ **Swarm Reason** → Agent debate, counter-check, consensus
+
 5️⃣ **Simulate** → If incomplete, run local world-models
+
 6️⃣ **Immutable Proof** → Hash answers, store source & cost
+
 7️⃣ **Reflect** → Store chain-of-thought, detect failure
+
 8️⃣ **Mutate** → GA rewrites broken steps
+
 9️⃣ **Retrain & Version** → Update vectors, rerankers, swarm strategies
+
 🔟 **Federate** → Sync mind-state across trusted devices
 
 ---
@@ -158,12 +167,16 @@ omnimind/
 
 🛑 **Not just embeddings + LLM.**
 OMNIMIND: *Thinks, debates, verifies, simulates, evolves.*
+
 🧠 **No black box.**
 Audit every thought. Inspect bias, cost, proof trail.
+
 🔗 **No vendor lock.**
 Federate across your own devices — your mind, your rules.
+
 ⚙️ **Fully MLOps Native.**
 ZenML + MLflow + CI/CD from day zero.
+
 💡 **A living cognitive kernel.**
 Today: prototype. Tomorrow: your personal AGI mesh.
 
