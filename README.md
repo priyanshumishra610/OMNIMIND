@@ -8,18 +8,18 @@
 ### ⚡ **What is OMNIMIND?**
 
 OMNIMIND is not a chatbot.
-It’s not another RAG pipeline.
-It’s not “just another AI project”.
+It’s not just another RAG pipeline.
+It’s not “yet another AI toy.”
 
 **OMNIMIND is your personal AGI seed** — a *self-curating*, *self-reasoning*, *self-simulating* cognitive engine that:
 
 * 📚 **Retrieves** trusted knowledge from vast sources
-* 🤖 **Verifies** information with multi-agent swarm debate
-* 🧩 **Simulates** reality when facts are missing
+* 🤖 **Verifies** information with a multi-agent swarm debate
+* 🔮 **Simulates** reality when facts are missing
 * 🕸️ **Maintains** a living Knowledge Graph, Vector DB & Thought Snapshots
 * 🔄 **Self-repairs** failing pipelines using genetic algorithms
-* 🔗 **Anchors** its answers with cryptographic proof trails
-* 🧠 **Thinks about its own thinking**, and stores it for you to inspect
+* 🔗 **Anchors** answers with cryptographic proof trails
+* 🧠 **Thinks about its own thinking**, stores it for you to inspect
 * 🌐 **Federates** across devices, forming a *personal knowledge mesh*
 
 **One mind. Infinite reach. Fully yours.**
@@ -31,10 +31,10 @@ It’s not “just another AI project”.
 | Feature                      | Description                                                                      |
 | ---------------------------- | -------------------------------------------------------------------------------- |
 | 🔍 **Hybrid Retrieval**      | Dynamic chunker → embeddings → Vector DB + KG overlay for ultra-relevant context |
-| 🧠 **Swarm Agents**          | Multiple LLM agents debate, verify, and reach consensus                          |
+| 🤝 **Council of Minds**      | Multiple LLM agents debate, verify, and reach consensus                          |
 | 🔮 **Simulation Sandbox**    | World-model when real facts run out — predicts hypotheticals                     |
 | 🔗 **Immutable Ledger**      | Cryptographic hash trail — verify sources, costs, bias signals                   |
-| 🔄 **Self-Repair Kernel**    | Genetic algorithms mutate underperforming pipelines                              |
+| ♻️ **Self-Repair Kernel**    | Genetic algorithms mutate underperforming pipelines                              |
 | 🕸️ **Federated Mind**       | Nodes sync securely across devices — your own distributed AGI                    |
 | 🎛️ **Thought Inspector UI** | Visualize chain-of-thought in real-time — audit your AI’s mind                   |
 | ⚙️ **MLOps Native**          | ZenML + MLflow + GitHub Actions — train, test, deploy, evolve                    |
@@ -50,15 +50,15 @@ graph TD
     B --> C[🔢 Embeddings]
     C --> D[📦 Vector DB]
     D --> E[🔗 Knowledge Graph Overlay]
-    E --> F[🤖 Multi-Agent Swarm Retrieval]
+    E --> F[🤝 Multi-Agent Swarm Retrieval]
     F --> G[🧠 Debate & Verify]
     G --> H[🔮 Simulation Sandbox]
     H --> I[🔗 Immutable Ledger]
     I --> J[🧩 Plugin Fallback]
     J --> K[✅ Answer + Source + Cost + Thought Trail]
     K --> L[🪞 Self-Reflection]
-    L --> M[🔄 Self-Mutation]
-    M --> N[♻️ Retrain Pipelines]
+    L --> M[♻️ Self-Mutation]
+    M --> N[🔁 Retrain Pipelines]
     N --> O[🕸️ Federate Nodes]
 ```
 
@@ -72,7 +72,7 @@ graph TD
 
 3️⃣ **Hybrid Search** → Vector DB + KG for ultra-relevant recall
 
-4️⃣ **Swarm Reason** → Agent debate, counter-check, consensus
+4️⃣ **Council of Minds** → Agent debate, counter-check, consensus
 
 5️⃣ **Simulate** → If incomplete, run local world-models
 
@@ -103,7 +103,7 @@ graph TD
 | Self-Tuning | Ray Tune, GA                  |
 | MLOps       | ZenML, MLflow, GitHub Actions |
 | Monitoring  | Prometheus, Grafana           |
-| UI          | Next.js, D3.js                |
+| UI          | Next.js, D3.js, Streamlit     |
 | Memory      | ChromaDB                      |
 | Plugins     | LangChain Tools, custom APIs  |
 
@@ -136,64 +136,57 @@ omnimind/
 > *Start simple — prove the loop works.*
 
 ```bash
-# Crawl and chunk test docs
+# Crawl & chunk trusted docs
 # Embed & store vectors + KG
-# Retrieve with multi-agent swarm
-# Inspect chain-of-thought in UI
-# Push proof to local ledger
-# Add feedback, auto-tune pipelines
+# Retrieve with Council of Minds (multi-agent swarm)
+# Inspect chain-of-thought in the Thought Inspector
+# Push proof to Immutable Ledger
+# Simulate when stuck, mutate when failing
 ```
 
 ---
 
-### 📊 **Roadmap**
+### 🚀 **Roadmap**
 
-✅ Phase 1 — Chunk → Embed → Vector → KG → Basic Retrieval
-
-✅ Phase 2 — Multi-Agent Swarm + Chain-of-Thought Storage
-
-✅ Phase 3 — Simulation Sandbox + Symbolic Reasoner
-
-✅ Phase 4 — Self-Mutation Engine w/ GA Tuning
-
-✅ Phase 5 — Immutable Ledger + Federated Nodes
-
-
-✅ Phase 6 — Inspector UI + Cost/Audit Dashboard
+| Phase | Codename                | Description                                                                     |
+| ----- | ----------------------- | ------------------------------------------------------------------------------- |
+| 1️⃣   | **✨ Awakening**         | *From silence comes the first word.* Ingest, chunk, embed, store, retrieve.     |
+| 2️⃣   | **🤝 Council of Minds** | *No thought unchallenged.* Swarm debate, chain-of-thought, verified answers.    |
+| 3️⃣   | **🔮 Hypersimulation**  | *When knowledge ends, imagination begins.* Local world-models & sandbox.        |
+| 4️⃣   | **♻️ Self-Mutation**    | *Better. Faster. Wiser.* Genetic tuning, pipeline self-repair.                  |
+| 5️⃣   | **🌐 Thought Horizon**  | *See your mind. Own your mind.* Inspector UI, immutable proofs, federated sync. |
 
 ---
 
 ### 🧬 **Why OMNIMIND Breaks the Mold**
 
-🛑 **Not just embeddings + LLM.**
-OMNIMIND: *Thinks, debates, verifies, simulates, evolves.*
+🛑 **Not just embeddings + LLM** — *OMNIMIND retrieves, reasons, debates, verifies, simulates, mutates.*
 
-🧠 **No black box.**
-Audit every thought. Inspect bias, cost, proof trail.
+🧠 **No black box** — *Every step is inspectable, auditable, verifiable.*
 
-🔗 **No vendor lock.**
-Federate across your own devices — your mind, your rules.
+🔗 **No vendor lock** — *Your mind runs on your machines, your rules.*
 
-⚙️ **Fully MLOps Native.**
-ZenML + MLflow + CI/CD from day zero.
+⚙️ **Fully MLOps Native** — *ZenML + MLflow + CI/CD from day zero.*
 
-💡 **A living cognitive kernel.**
-Today: prototype. Tomorrow: your personal AGI mesh.
+💡 **A living cognitive kernel** — *Today: prototype. Tomorrow: your personal AGI.*
 
 ---
 
 ### 🔒 **No More Blind AI**
 
-✅ Inspect the mind.
-✅ Verify the truth.
-✅ Trust the chain.
-✅ Own your mind-state.
+✅ Inspect the mind
+
+✅ Verify the truth
+
+✅ Trust the chain
+
+✅ Own your mind-state
 
 ---
 
 ### 👑 **Built by Priyanshu Mishra**
 
-> *“I build benchmarks, not MVPs. This is my AGI seed — my proof that we can think bigger, better, responsibly.”*
+> *“I build benchmarks, not MVPs. This is my AGI seed — proof we can think bigger, better, responsibly.”*
 
 ---
 
@@ -208,10 +201,14 @@ Today: prototype. Tomorrow: your personal AGI mesh.
 ### 🧬 **License**
 
 Open-Source. MIT. Yours to evolve.
-*Your mind. Your machine. Your OMNIMIND.*
+**Your mind. Your machine. Your OMNIMIND.**
 
 ---
 
 ## 🌌 **Welcome to the seed of your personal AGI kernel. Build it. Fork it. Make it think.** 🔮
+
+---
+
+
 
 
