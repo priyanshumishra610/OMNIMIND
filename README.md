@@ -209,6 +209,22 @@ Open-Source. MIT. Yours to evolve.
 
 ---
 
+## 🚦 **How to Fix**
+
+1. **Remove or comment out the `d3py` line in your `requirements.txt`:**
+   ```
+   # d3py>=0.0.2
+   ```
+
+2. **Re-run the install:**
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+---
+
+Would you like me to update your `requirements.txt` and finish the install?
+
 
 
 
