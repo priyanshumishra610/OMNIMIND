@@ -15,3 +15,11 @@ class ImmutableVerifier:
         proof = h.hexdigest()
         logger.info(f"Immutable proof hash for config+fitness: {proof}")
         return proof 
+
+    @staticmethod
+    def hash_memory(data):
+        """Hash memory data for verification."""
+        import hashlib
+        import json
+        data_str = json.dumps(data, sort_keys=True)
+        return hashlib.sha256(data_str.encode()).hexdigest() 

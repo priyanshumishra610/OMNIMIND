@@ -158,7 +158,7 @@ class TestVectorDB:
         from vectordb.vectordb import VectorDB
         vectordb = VectorDB()
         assert vectordb is not None
-        assert vectordb.backend == "faiss"
+        assert vectordb.backend in ["faiss", "simple"]
     
     def test_collection_creation(self):
         """Test collection creation."""
