@@ -14,6 +14,10 @@ from memory.procedural_manager import ProceduralManager
 from reasoners.memory_reasoner import MemoryReasoner
 from logger.memory_logger import MemoryLogger
 from supervisor.supervisor_core import SupervisorCore
+from planner.goal_manager import GoalManager
+from planner.planner_engine import PlannerEngine
+from taskloop.auto_loop import AutoLoop
+from taskloop.watchdog import Watchdog
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +44,12 @@ memory_logger = MemoryLogger()
 # Supervisor Core instance
 supervisor_core = SupervisorCore()
 
+# Initialize planner and task loop components
+goal_manager = GoalManager()
+planner_engine = PlannerEngine()
+auto_loop = AutoLoop(goal_manager, planner_engine)
+watchdog = Watchdog(auto_loop.status, auto_loop.start)
+
 # Pydantic models
 class SearchRequest(BaseModel):
     query: str
@@ -63,6 +73,18 @@ class MemoryReasonRequest(BaseModel):
 class SupervisorControlRequest(BaseModel):
     command: str
     params: Optional[Dict[str, Any]] = None
+
+class GoalCreateRequest(BaseModel):
+    description: str
+    metadata: Optional[Dict[str, Any]] = None
+
+class GoalUpdateRequest(BaseModel):
+    description: Optional[str] = None
+    status: Optional[str] = None
+    metadata: Optional[Dict[str, Any]] = None
+
+class LoopControlRequest(BaseModel):
+    command: str  # 'start' or 'stop'
 
 @app.get("/")
 def read_root():
@@ -240,6 +262,64 @@ def supervisor_control(request: SupervisorControlRequest):
 def supervisor_metrics():
     """Return Supervisor Core health and performance metrics."""
     return supervisor_core.get_metrics()
+
+@app.post("/goals")
+def create_goal(request: GoalCreateRequest):
+    """Create a new goal."""
+    goal_id = goal_manager.create_goal(request.description, request.metadata)
+    return {"goal_id": goal_id}
+
+@app.get("/goals")
+def list_goals(status: Optional[str] = None):
+    """List all goals, optionally filtered by status."""
+    return goal_manager.list_goals(status=status)
+
+@app.get("/goals/{goal_id}")
+def get_goal(goal_id: str):
+    """Get a specific goal by ID."""
+    goal = goal_manager.get_goal(goal_id)
+    if not goal:
+        return {"error": "Goal not found"}
+    return goal
+
+@app.put("/goals/{goal_id}")
+def update_goal(goal_id: str, request: GoalUpdateRequest):
+    """Update a goal's description, status, or metadata."""
+    updated = goal_manager.update_goal(goal_id, request.description, request.status, request.metadata)
+    return {"updated": updated}
+
+@app.delete("/goals/{goal_id}")
+def delete_goal(goal_id: str):
+    """Delete a goal by ID."""
+    deleted = goal_manager.delete_goal(goal_id)
+    return {"deleted": deleted}
+
+@app.get("/goals/{goal_id}/history")
+def goal_history(goal_id: str):
+    """Get the history of a specific goal."""
+    return goal_manager.get_history(goal_id)
+
+@app.get("/loop/status")
+def loop_status():
+    """Get the status of the autonomous task loop and watchdog."""
+    return {
+        "loop": auto_loop.status(),
+        "watchdog": watchdog.get_status()
+    }
+
+@app.post("/loop/control")
+def loop_control(request: LoopControlRequest):
+    """Control the autonomous task loop (start/stop)."""
+    if request.command == "start":
+        auto_loop.start()
+        watchdog.start()
+        return {"status": "started"}
+    elif request.command == "stop":
+        auto_loop.stop()
+        watchdog.stop()
+        return {"status": "stopped"}
+    else:
+        return {"error": "Unknown command"}
 
 if __name__ == "__main__":
     import uvicorn
