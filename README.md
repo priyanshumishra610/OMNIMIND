@@ -1,229 +1,230 @@
-## 🧬 **OMNIMIND**
+# 🧬 **OMNIMIND**
 
-> *The Autonomous, Self-Simulating, Self-Evolving Cognitive Kernel*
+> *The Autonomous, Self-Simulating, Self-Evolving Cognitive Kernel*  
 > *A living digital organism that retrieves, reasons, verifies, simulates, self-repairs — and evolves its own mind.*
 
----
-
-### ⚡ **What is OMNIMIND?**
-
-OMNIMIND is not a chatbot.
-It’s not just another RAG pipeline.
-It’s not “yet another AI toy.”
-
-**OMNIMIND is your personal AGI seed** — a *self-curating*, *self-reasoning*, *self-simulating* cognitive engine that:
-
-* 📚 **Retrieves** trusted knowledge from vast sources
-* 🤖 **Verifies** information with a multi-agent swarm debate
-* 🔮 **Simulates** reality when facts are missing
-* 🕸️ **Maintains** a living Knowledge Graph, Vector DB & Thought Snapshots
-* 🔄 **Self-repairs** failing pipelines using genetic algorithms
-* 🔗 **Anchors** answers with cryptographic proof trails
-* 🧠 **Thinks about its own thinking**, stores it for you to inspect
-* 🌐 **Federates** across devices, forming a *personal knowledge mesh*
-
-**One mind. Infinite reach. Fully yours.**
+![Version](https://img.shields.io/badge/version-v0.5.0-blue.svg) ![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)
 
 ---
 
-### 🧠 **Key Breakthroughs**
+## 🌌 **What is OMNIMIND?**
 
-| Feature                      | Description                                                                      |
-| ---------------------------- | -------------------------------------------------------------------------------- |
-| 🔍 **Hybrid Retrieval**      | Dynamic chunker → embeddings → Vector DB + KG overlay for ultra-relevant context |
-| 🤝 **Council of Minds**      | Multiple LLM agents debate, verify, and reach consensus                          |
-| 🔮 **Simulation Sandbox**    | World-model when real facts run out — predicts hypotheticals                     |
-| 🔗 **Immutable Ledger**      | Cryptographic hash trail — verify sources, costs, bias signals                   |
-| ♻️ **Self-Repair Kernel**    | Genetic algorithms mutate underperforming pipelines                              |
-| 🕸️ **Federated Mind**       | Nodes sync securely across devices — your own distributed AGI                    |
-| 🎛️ **Thought Inspector UI** | Visualize chain-of-thought in real-time — audit your AI’s mind                   |
-| ⚙️ **MLOps Native**          | ZenML + MLflow + GitHub Actions — train, test, deploy, evolve                    |
-| 🔌 **Plugins**               | Live API fallback — Wolfram Alpha, Web Search, News Feeds                        |
+OMNIMIND is not just a chatbot.  
+It’s not “just another RAG.”  
+It’s your **personal AGI seed** — a *self-curating, self-reasoning, self-simulating* cognitive kernel that:
+
+* 📚 **Retrieves** trusted knowledge from multiple sources.  
+* 🤖 **Debates** itself with a swarm of autonomous agents.  
+* 🔮 **Simulates** scenarios when data is incomplete.  
+* 🕸️ **Grows** a living Knowledge Graph and Vector Memory.  
+* 🔄 **Mutates** its pipelines to self-improve.  
+* 🔗 **Anchors** every answer with a cryptographic proof trail.  
+* 🧩 **Expands** with plugins when it hits an edge.  
+* 🌐 **Federates** across devices — your mind, your mesh.
 
 ---
 
-### 🔬 **How OMNIMIND Thinks**
+## 🎯 **Who Should Use OMNIMIND?**
+
+**OMNIMIND is for:**
+
+* AI builders who want full transparency.
+* MLOps engineers pushing autonomous pipelines.
+* Curious devs, researchers, and makers ready to build a personal AGI kernel they fully control.
+
+---
+
+## ⚡️ **Why OMNIMIND?**
+
+✅ No black box: Inspect every chain-of-thought.  
+✅ No hallucinations: Multi-agent consensus + simulation fallback.  
+✅ No vendor lock-in: Federate across your own devices.  
+✅ Fully versioned, self-evolving, cryptographically verifiable.
+
+---
+
+## 🗺️ **Phased Roadmap**
+
+| Phase Name                        | What Happens                                                |
+| --------------------------------- | ----------------------------------------------------------- |
+| 🧭 **1 — Awakening**              | Crawl → Chunk → Embed → Store in Vector DB & KG.            |
+| 🧑‍🤝‍🧑 **2 — Council of Minds** | Multi-agent swarm debate, fact-checking, counter-argument.  |
+| 🔮 **3 — Hypersimulation**        | Symbolic sandbox for hypothetical reasoning.                |
+| 🧬 **4 — Self-Mutation**          | Genetic Algorithm self-repairs and optimizes pipelines.     |
+| 🌠 **5 — Thought Horizon**        | Long-term memory, user feedback loop, federated mesh nodes. |
+
+---
+
+## 🔬 **How OMNIMIND Thinks**
+
+### 🧠 **Cognitive Flow**
 
 ```mermaid
-graph TD
-    A[🌍 Crawl New Data] --> B[🔍 Smart Chunking]
-    B --> C[🔢 Embeddings]
-    C --> D[📦 Vector DB]
-    D --> E[🔗 Knowledge Graph Overlay]
-    E --> F[🤝 Multi-Agent Swarm Retrieval]
-    F --> G[🧠 Debate & Verify]
-    G --> H[🔮 Simulation Sandbox]
-    H --> I[🔗 Immutable Ledger]
-    I --> J[🧩 Plugin Fallback]
-    J --> K[✅ Answer + Source + Cost + Thought Trail]
-    K --> L[🪞 Self-Reflection]
-    L --> M[♻️ Self-Mutation]
-    M --> N[🔁 Retrain Pipelines]
-    N --> O[🕸️ Federate Nodes]
+flowchart TD
+  Q([🔍 Query])
+  Chunk[📚 Smart Chunker]
+  Embed[🔢 Embedder]
+  VDB[📦 Vector DB]
+  KG[🕸️ Knowledge Graph]
+  Swarm[🤖 Swarm Debate]
+  Consensus[🧠 Consensus Resolver]
+  Plugins[🔌 Plugins]
+  Sim[🔮 Hypersimulation]
+  Answer[✅ Verified Answer]
+  Ledger[🔗 Immutable Ledger]
+  Memory[🗃️ Long-Term Memory]
+  Federate[🌐 Federated Sync]
+
+  Q --> Chunk --> Embed --> VDB --> KG --> Swarm --> Consensus
+  Consensus -->|Strong| Answer
+  Consensus -->|Weak| Plugins --> Sim --> Answer
+  Answer --> Ledger --> Memory --> Federate
+````
+
+---
+
+### 🔄 **Self-Evolution Loop**
+
+```mermaid
+sequenceDiagram
+  participant P as 📦 Pipeline
+  participant F as 📊 Fitness Tracker
+  participant M as 🧬 Mutation Engine
+  participant L as 🔗 Immutable Verifier
+
+  P->>F: Report Accuracy, Latency
+  F->>M: Compute Fitness Score
+  M->>P: Mutate Pipeline Config
+  P->>L: Hash & Log New Config
+  L->>F: Store Proof, Return Status
 ```
 
 ---
 
-### 🔑 **Core Loop**
+## 🗂️ **Key Capabilities**
 
-1️⃣ **Ingest** → Crawl trusted sources
-
-2️⃣ **Chunk & Embed** → Adaptive chunker + multi-embedding models
-
-3️⃣ **Hybrid Search** → Vector DB + KG for ultra-relevant recall
-
-4️⃣ **Council of Minds** → Agent debate, counter-check, consensus
-
-5️⃣ **Simulate** → If incomplete, run local world-models
-
-6️⃣ **Immutable Proof** → Hash answers, store source & cost
-
-7️⃣ **Reflect** → Store chain-of-thought, detect failure
-
-8️⃣ **Mutate** → GA rewrites broken steps
-
-9️⃣ **Retrain & Version** → Update vectors, rerankers, swarm strategies
-
-🔟 **Federate** → Sync mind-state across trusted devices
+| Feature                  | What It Does                                                    |
+| ------------------------ | --------------------------------------------------------------- |
+| 📚 **Hybrid Retrieval**  | Smart chunking, multi-model embeddings, Vector DB + KG overlay. |
+| 🤖 **Swarm Agents**      | Base, fact-checker, skeptic debate for consensus.               |
+| 🔮 **Hypersimulation**   | World-model sandbox for hypotheticals.                          |
+| 🔗 **Immutable Ledger**  | Cryptographic hash trails for all answers.                      |
+| 🧬 **Self-Mutator**      | Genetic Algorithms auto-repair pipelines.                       |
+| 🗃️ **Long-Term Memory** | Logs chain-of-thought snapshots for context re-use.             |
+| 🌐 **Federated Mind**    | Sync mind-state securely across devices.                        |
+| ⚙️ **MLOps Native**      | ZenML + MLflow + GitHub Actions.                                |
+| 🔌 **Plugin Fallback**   | Wolfram Alpha, web search, news feeds.                          |
 
 ---
 
-### 🧩 **Tech Stack**
+## ⚙️ **Tech Stack**
 
-| Layer       | Tools                         |
-| ----------- | ----------------------------- |
-| Crawling    | Scrapy, Newspaper3k           |
-| Chunking    | Adaptive LLM chunker          |
-| Embeddings  | OpenAI, Ollama, BGE           |
-| Vector DB   | FAISS + Pinecone              |
-| KG          | Neo4j                         |
-| Multi-Agent | CrewAI, AutoGen, custom       |
-| Simulation  | Symbolic Python sandbox       |
-| Ledger      | IPFS, simple blockchain       |
-| Self-Tuning | Ray Tune, GA                  |
-| MLOps       | ZenML, MLflow, GitHub Actions |
-| Monitoring  | Prometheus, Grafana           |
-| UI          | Next.js, D3.js, Streamlit     |
-| Memory      | ChromaDB                      |
-| Plugins     | LangChain Tools, custom APIs  |
-
----
-
-### 🧱 **Repo Structure**
-
-```
-omnimind/
- ├── crawlers/          # Web scrapers & ingestors
- ├── chunker.py         # Smart chunker logic
- ├── embedder.py        # Multi-model embedding
- ├── vectordb.py        # Hybrid vector DB
- ├── kg.py              # Knowledge Graph
- ├── agents/            # Swarm orchestrator
- ├── simulator.py       # World-model sandbox
- ├── verifier.py        # Immutable proof ledger
- ├── self_mutator.py    # GA self-repair
- ├── pipelines/         # ZenML pipelines
- ├── monitor.py         # Prometheus hooks
- ├── ci_cd/             # GitHub Actions workflows
- ├── dashboard/         # Thought Inspector UI
- └── main.py            # FastAPI entrypoint
-```
+| Layer       | Tools                           |
+| ----------- | ------------------------------- |
+| Crawling    | Scrapy, Newspaper3k             |
+| Chunking    | Adaptive LLM Chunker            |
+| Embeddings  | OpenAI, Ollama, BGE             |
+| Vector DB   | FAISS, ChromaDB                 |
+| KG          | Neo4j                           |
+| Agents      | CrewAI, AutoGen, Custom         |
+| Simulation  | Symbolic Python Sandbox, SymPy  |
+| Ledger      | IPFS, SHA256, Simple Blockchain |
+| Self-Tuning | Custom GA, Ray Tune             |
+| MLOps       | ZenML, MLflow, GitHub Actions   |
+| Monitoring  | Prometheus, Grafana             |
+| UI          | Streamlit + Next.js + D3.js     |
+| Plugins     | LangChain Tools, Custom APIs    |
 
 ---
 
-### ⚡ **Run OMNIMIND**
-
-> *Start simple — prove the loop works.*
+## 🚀 **Quick Start**
 
 ```bash
-# Crawl & chunk trusted docs
-# Embed & store vectors + KG
-# Retrieve with Council of Minds (multi-agent swarm)
-# Inspect chain-of-thought in the Thought Inspector
-# Push proof to Immutable Ledger
-# Simulate when stuck, mutate when failing
+git clone https://github.com/priyanshumishra610/OMNIMIND.git
+cp .env.example .env
+docker-compose up --build
+```
+
+**Try a search query:**
+
+```bash
+curl -X POST "http://localhost:8000/search" \
+-H "Content-Type: application/json" \
+-d '{"query": "What is Quantum Gravity?"}'
+```
+
+* FastAPI: `localhost:8000`
+* Neo4j: `localhost:7474`
+* Prometheus: `localhost:9090`
+* Thought Inspector: `localhost:8501`
+
+---
+
+## 📋 **Repository Structure**
+
+```plaintext
+omnimind/
+ ├── crawlers/
+ ├── chunker/
+ ├── embedder/
+ ├── vectordb/
+ ├── kg/
+ ├── agents/
+ ├── simulator/
+ ├── verifier/
+ ├── self_mutator/
+ ├── logger/
+ ├── memory/
+ ├── plugins/
+ ├── pipelines/
+ ├── dashboard/
+ ├── main.py
+ ├── Dockerfile
+ ├── docker-compose.yml
+ ├── requirements.txt
+ ├── LICENSE
+ ├── README.md
+ ├── CONTRIBUTING.md
+ ├── CODE_OF_CONDUCT.md
+ ├── DEPLOY.md
+ ├── .gitignore
+ ├── tests/
 ```
 
 ---
 
-### 🚀 **Roadmap**
+## 🔒 **Security & Privacy**
 
-| Phase | Codename                | Description                                                                     |
-| ----- | ----------------------- | ------------------------------------------------------------------------------- |
-| 1️⃣   | **✨ Awakening**         | *From silence comes the first word.* Ingest, chunk, embed, store, retrieve.     |
-| 2️⃣   | **🤝 Council of Minds** | *No thought unchallenged.* Swarm debate, chain-of-thought, verified answers.    |
-| 3️⃣   | **🔮 Hypersimulation**  | *When knowledge ends, imagination begins.* Local world-models & sandbox.        |
-| 4️⃣   | **♻️ Self-Mutation**    | *Better. Faster. Wiser.* Genetic tuning, pipeline self-repair.                  |
-| 5️⃣   | **🌐 Thought Horizon**  | *See your mind. Own your mind.* Inspector UI, immutable proofs, federated sync. |
+OMNIMIND stores your knowledge locally.
+You control where your mind syncs.
+**Encrypt your `.env` and data — this is your private cognitive kernel.**
+No external telemetry is forced.
 
 ---
 
-### 🧬 **Why OMNIMIND Breaks the Mold**
+## 🧩 **Contribute**
 
-🛑 **Not just embeddings + LLM** — *OMNIMIND retrieves, reasons, debates, verifies, simulates, mutates.*
+* Read [CONTRIBUTING.md](CONTRIBUTING.md) to fork & build.
+* Follow our [CODE\_OF\_CONDUCT.md](CODE_OF_CONDUCT.md).
+* Deploy with [DEPLOY.md](DEPLOY.md).
 
-🧠 **No black box** — *Every step is inspectable, auditable, verifiable.*
-
-🔗 **No vendor lock** — *Your mind runs on your machines, your rules.*
-
-⚙️ **Fully MLOps Native** — *ZenML + MLflow + CI/CD from day zero.*
-
-💡 **A living cognitive kernel** — *Today: prototype. Tomorrow: your personal AGI.*
+**Your mind. Your rules. Your machine.**
 
 ---
 
-### 🔒 **No More Blind AI**
+## 📝 **License**
 
-✅ Inspect the mind
-
-✅ Verify the truth
-
-✅ Trust the chain
-
-✅ Own your mind-state
+Open-Source. Apache 2.0 — see [LICENSE](LICENSE).
 
 ---
 
-### 👑 **Built by Priyanshu Mishra**
+## 👑 **Built by Priyanshu Mishra**
 
-> *“I build benchmarks, not MVPs. This is my AGI seed — proof we can think bigger, better, responsibly.”*
-
----
-
-### ⭐ **Contribute**
-
-* 🛠️ Fork it → Build your own modules
-* 🔍 Open Issues → Suggest edge cases
-* 🚀 Star it → Signal you believe in the future
+> *“I build benchmarks, not MVPs. This is my AGI seed — my proof that we can think bigger, better, responsibly.”*
 
 ---
 
-### 🧬 **License**
-
-Open-Source. MIT. Yours to evolve.
-**Your mind. Your machine. Your OMNIMIND.**
-
----
-
-## 🌌 **Welcome to the seed of your personal AGI kernel. Build it. Fork it. Make it think.** 🔮
-
----
-
-## 🚦 **How to Fix**
-
-1. **Remove or comment out the `d3py` line in your `requirements.txt`:**
-   ```
-   # d3py>=0.0.2
-   ```
-
-2. **Re-run the install:**
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
-
----
-
-Would you like me to update your `requirements.txt` and finish the install?
+## 🌟 **Welcome to your personal AGI seed. Fork it. Evolve it. Make it think.** 🔮
 
 
 
