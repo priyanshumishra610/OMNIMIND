@@ -18,6 +18,9 @@ from planner.goal_manager import GoalManager
 from planner.planner_engine import PlannerEngine
 from taskloop.auto_loop import AutoLoop
 from taskloop.watchdog import Watchdog
+from pipelines.evidently_monitoring import evidently_monitoring_step
+from fastapi import UploadFile, File
+import pandas as pd
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -320,6 +323,17 @@ def loop_control(request: LoopControlRequest):
         return {"status": "stopped"}
     else:
         return {"error": "Unknown command"}
+
+@app.post("/monitor/drift")
+def monitor_drift(reference: UploadFile = File(...), current: UploadFile = File(...)):
+    """
+    Run Evidently AI drift report on uploaded reference and current data (CSV).
+    Returns path to the generated HTML report.
+    """
+    ref_df = pd.read_csv(reference.file)
+    cur_df = pd.read_csv(current.file)
+    report_path = evidently_monitoring_step(ref_df, cur_df, output_path="drift_report.html")
+    return {"report_path": report_path}
 
 if __name__ == "__main__":
     import uvicorn

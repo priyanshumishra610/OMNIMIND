@@ -10,3 +10,4 @@ deap
 zenml
 prometheus-client
 flake8 
+evidently 

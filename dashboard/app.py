@@ -7,6 +7,9 @@ Main application for the Thought Inspector UI.
 import streamlit as st
 import json
 from typing import Dict, Any
+import requests
+import os
+import streamlit.components.v1 as components
 
 def main():
     """Main dashboard application."""
@@ -92,23 +95,25 @@ def show_knowledge_graph():
     """, unsafe_allow_html=True)
 
 def show_metrics():
-    """Show system metrics."""
-    st.header("System Metrics")
-    
-    # Metrics dashboard
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("Performance Metrics")
-        st.metric("Response Time", "1.2s")
-        st.metric("Throughput", "45 req/min")
-        st.metric("Error Rate", "0.1%")
-    
-    with col2:
-        st.subheader("Resource Usage")
-        st.metric("CPU Usage", "23%")
-        st.metric("Memory Usage", "1.2GB")
-        st.metric("Storage", "2.1GB")
+    """Show metrics and monitoring, including Evidently drift report upload/viewer."""
+    st.header("📊 Monitoring & Drift Detection")
+    st.markdown("Upload reference and current data to generate an Evidently drift report.")
+    ref_file = st.file_uploader("Reference Data (CSV)", type=["csv"], key="ref")
+    cur_file = st.file_uploader("Current Data (CSV)", type=["csv"], key="cur")
+    if st.button("Run Drift Report") and ref_file and cur_file:
+        files = {"reference": ref_file, "current": cur_file}
+        response = requests.post("http://localhost:8000/monitor/drift", files=files)
+        if response.ok:
+            report_path = response.json().get("report_path")
+            st.success(f"Drift report generated: {report_path}")
+            if os.path.exists(report_path):
+                with open(report_path, "r") as f:
+                    html = f.read()
+                components.html(html, height=800, scrolling=True)
+            else:
+                st.info("Report file not found on this machine. Download from server if remote.")
+        else:
+            st.error("Failed to generate drift report.")
 
 def show_settings():
     """Show system settings."""
