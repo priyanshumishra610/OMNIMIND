@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  background: #0f172a;
+  color: #e0e7ef;
+  font-family: 'Fira Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #22223b;
+}
+::-webkit-scrollbar-thumb {
+  background: #6e00ff;
+  border-radius: 4px;
+} 

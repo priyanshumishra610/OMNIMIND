@@ -1,0 +1,21 @@
+:root {
+  --color-plasma: #6e00ff;
+  --color-mesh: #00ffe7;
+  --color-timeline: #ffb300;
+  --color-biosim: #00ff6a;
+  --color-console: #22223b;
+  --color-plugin: #ff007c;
+  --color-ambient: #0f172a;
+  --gradient-plasma: linear-gradient(135deg, #6e00ff 0%, #00ffe7 100%);
+  --gradient-mesh: linear-gradient(90deg, #00ffe7 0%, #6e00ff 100%);
+  --gradient-biosim: linear-gradient(120deg, #00ff6a 0%, #ffb300 100%);
+}
+
+.theme-dark {
+  --color-bg: #0f172a;
+  --color-fg: #e0e7ef;
+}
+.theme-light {
+  --color-bg: #e0e7ef;
+  --color-fg: #0f172a;
+} 
