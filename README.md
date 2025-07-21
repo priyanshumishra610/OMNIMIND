@@ -1,5 +1,7 @@
 # 🧬 **OMNIMIND**
 
+![Build Status](https://github.com/priyanshumishra610/OMNIMIND/actions/workflows/release.yml/badge.svg)
+
 > *The Autonomous, Self-Simulating, Self-Evolving Cognitive Kernel*  
 > *A living digital organism that retrieves, reasons, verifies, simulates, self-repairs — and evolves its own mind.*
 
