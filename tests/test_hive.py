@@ -12,7 +12,7 @@ def test_agent_node_heartbeat():
     monitor = HiveMonitor(timeout=0.2)
     node = AgentNode("node1", monitor=monitor)
     node.start()
-    time.sleep(0.3)
+    time.sleep(0.1)  # Shorter than timeout
     node.stop()
     heartbeats = monitor.get_heartbeats()
     assert "node1" in heartbeats
