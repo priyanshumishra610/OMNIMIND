@@ -12,13 +12,22 @@ def test_episodic_manager():
     """Test storing, retrieving, and pruning episodic memory."""
     with tempfile.TemporaryDirectory() as tmpdir:
         log_path = os.path.join(tmpdir, "episodic.jsonl")
-        manager = EpisodicManager(log_path=log_path, retention_days=1)
+        manager = EpisodicManager(log_path=log_path, retention_days=0)  # Use 0 to trigger pruning
         manager.log_session("sess1", "What is AI?", "Thinking about AI", "Good", {"foo": "bar"})
+        
+        # Should retrieve 1 session before pruning
         sessions = manager.retrieve_sessions(session_id="sess1")
         assert len(sessions) == 1
         assert sessions[0]["user_query"] == "What is AI?"
+        
+        # Should prune the old session (retention_days = 0)
         removed = manager.prune_sessions()
-        assert removed == 0
+        assert removed > 0  # ✅ Fix: Check that at least one session was pruned
+
+        # After pruning, no sessions should remain
+        sessions_after = manager.retrieve_sessions(session_id="sess1")
+        assert len(sessions_after) == 0
+
 
 def test_semantic_manager():
     """Test clustering and semantic search."""
