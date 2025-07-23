@@ -1,30 +1,30 @@
-============================= test session starts ==============================
-platform darwin -- Python 3.10.0, pytest-8.4.1, pluggy-1.6.0
-rootdir: /Users/priyanshumishra/Documents/OMNIMIND
-plugins: anyio-4.9.0
-collected 48 items
+...s.............................................................F
+=================================== FAILURES ===================================
+__________________ TestFastAPIEndpoints.test_health_endpoint ___________________
 
-test_phase1.py .                                                         [  2%]
-test_phase1_simple.py .                                                  [  4%]
-tests/test_basic.py .........s..                                         [ 29%]
-tests/test_phase1.py ....................                                [ 70%]
-tests/test_phase2.py ..                                                  [ 75%]
-tests/test_phase3.py ...                                                 [ 81%]
-tests/test_phase4.py ....                                                [ 89%]
-tests/test_phase5.py .....                                               [100%]
+self = <tests.test_phase1.TestFastAPIEndpoints object at 0x1048c6f80>
 
-=============================== warnings summary ===============================
-test_phase1.py::test_phase1_pipeline
-  /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/_pytest/python.py:161: PytestReturnNotNoneWarning: Test functions should return None, but test_phase1.py::test_phase1_pipeline returned <class 'bool'>.
-  Did you mean to use `assert` instead of `return`?
-  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
-    warnings.warn(
+    def test_health_endpoint(self):
+        """Test health endpoint."""
+>       from main import app
 
-test_phase1_simple.py::test_phase1_structure
-  /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/_pytest/python.py:161: PytestReturnNotNoneWarning: Test functions should return None, but test_phase1_simple.py::test_phase1_structure returned <class 'bool'>.
-  Did you mean to use `assert` instead of `return`?
-  See https://docs.pytest.org/en/stable/how-to/assert.html#return-not-none for more information.
-    warnings.warn(
+tests/test_phase1.py:302: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+main.py:21: in <module>
+    from pipelines.evidently_monitoring import evidently_monitoring_step
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-================== 47 passed, 1 skipped, 2 warnings in 0.36s ===================
+    """
+    Evidently Monitoring Pipeline Step
+    ---------------------------------
+    Generates data/model drift reports using Evidently AI.
+    """
+    import pandas as pd
+>   from evidently.report import Report
+E   ModuleNotFoundError: No module named 'evidently.report'
+
+pipelines/evidently_monitoring.py:7: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_phase1.py::TestFastAPIEndpoints::test_health_endpoint - Mod...
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 64 passed, 1 skipped, 10 warnings in 33.89s
