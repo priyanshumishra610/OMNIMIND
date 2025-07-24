@@ -1,55 +1,65 @@
-import threading
+"""
+Task Scheduler Module
+"""
+from typing import Dict, List, Any, Callable, Tuple
 import time
-from typing import List, Dict, Any, Optional, Callable
+import heapq
 
 class Scheduler:
-    """
-    Handles scheduling, delays, periodic and conditional tasks, and watchdogs for OMNIMIND Supervisor.
-    Thread-safe and modular for integration with SupervisorCore.
-    """
+    """Manages task scheduling and watchdog timers."""
+    
     def __init__(self):
-        self._lock = threading.Lock()
-        self.scheduled = []  # List of (timestamp, task, condition, periodic, interval)
-        self.watchdogs = []  # List of (check_fn, action_fn)
-
-    def schedule_task(self, task: Dict[str, Any], delay: float = 0, periodic: bool = False, interval: float = 0, condition: Optional[Callable[[], bool]] = None) -> None:
-        """Schedule a task with optional delay, periodicity, and condition."""
-        with self._lock:
-            run_at = time.time() + delay
-            self.scheduled.append((run_at, task, condition, periodic, interval))
-
-    def check_and_schedule(self, task_manager) -> None:
-        """Check scheduled tasks and add them to the task manager if ready."""
-        now = time.time()
-        to_reschedule = []
-        with self._lock:
-            for entry in self.scheduled:
-                run_at, task, condition, periodic, interval = entry
-                if now >= run_at and (condition is None or condition()):
-                    task_manager.add_task(task)
-                    if periodic:
-                        to_reschedule.append((now + interval, task, condition, periodic, interval))
-                else:
-                    to_reschedule.append(entry)
-            self.scheduled = to_reschedule
-        self._run_watchdogs()
-
-    def add_watchdog(self, check_fn: Callable[[], bool], action_fn: Callable[[], None]) -> None:
-        """Add a watchdog that runs check_fn and triggers action_fn if check fails."""
-        with self._lock:
-            self.watchdogs.append((check_fn, action_fn))
-
+        """Initialize scheduler."""
+        self.scheduled_tasks: List[Tuple[float, Dict[str, Any]]] = []
+        self.watchdogs: List[Tuple[Callable[[], bool], Callable[[], None]]] = []
+    
+    def schedule_task(self, task: Dict[str, Any], delay: float) -> None:
+        """Schedule a task for future execution.
+        
+        Args:
+            task: Task configuration and metadata
+            delay: Delay in seconds before execution
+        """
+        execution_time = time.time() + delay
+        heapq.heappush(self.scheduled_tasks, (execution_time, task))
+    
+    def check_and_schedule(self, task_manager: Any) -> None:
+        """Check for tasks that are ready to be scheduled.
+        
+        Args:
+            task_manager: TaskManager instance to add tasks to
+        """
+        current_time = time.time()
+        
+        while self.scheduled_tasks and self.scheduled_tasks[0][0] <= current_time:
+            _, task = heapq.heappop(self.scheduled_tasks)
+            task_manager.add_task(task)
+    
+    def add_watchdog(self, condition: Callable[[], bool], action: Callable[[], None]) -> None:
+        """Add a watchdog timer with condition and action.
+        
+        Args:
+            condition: Function that returns True when watchdog should trigger
+            action: Function to call when watchdog triggers
+        """
+        self.watchdogs.append((condition, action))
+    
     def _run_watchdogs(self) -> None:
-        """Run all watchdogs and trigger actions if checks fail."""
-        with self._lock:
-            for check_fn, action_fn in self.watchdogs:
-                try:
-                    if not check_fn():
-                        action_fn()
-                except Exception:
-                    continue
-
-    def scheduled_task_count(self) -> int:
-        """Return the number of scheduled tasks."""
-        with self._lock:
-            return len(self.scheduled) 
+        """Run all registered watchdog timers."""
+        for condition, action in self.watchdogs:
+            try:
+                # If condition returns False, trigger the action
+                if not condition():
+                    action()
+            except Exception as e:
+                print(f"Watchdog error: {str(e)}")  # Use logger in production
+    
+    def get_next_execution(self) -> float:
+        """Get timestamp of next scheduled task.
+        
+        Returns:
+            Float timestamp or -1 if no tasks scheduled
+        """
+        if not self.scheduled_tasks:
+            return -1
+        return self.scheduled_tasks[0][0] 

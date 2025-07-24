@@ -1,57 +1,79 @@
-import threading
-from typing import Dict, Any, Optional
+"""
+Interrupt Handler Module
+"""
+from typing import Dict, Any
 
 class InterruptHandler:
-    """
-    Handles task interruptions: pause, kill, reroute, or resume tasks for OMNIMIND Supervisor.
-    Thread-safe and modular for integration with SupervisorCore and FastAPI.
-    """
+    """Handles task interrupts and control commands."""
+    
     def __init__(self):
-        self._lock = threading.Lock()
-        self.interrupts = {}  # task_id -> interrupt_type
-
-    def check_interrupts(self, task_manager) -> None:
-        """Check for interrupts and apply them to tasks."""
-        with self._lock:
-            for task_id, interrupt_type in list(self.interrupts.items()):
-                task = task_manager.get_task(task_id)
-                if not task:
-                    continue
-                if interrupt_type == "pause":
-                    task["status"] = "paused"
-                elif interrupt_type == "kill":
-                    task["status"] = "killed"
-                elif interrupt_type == "reroute":
-                    task["status"] = "pending"
-                # Remove interrupt after handling
-                del self.interrupts[task_id]
-
-    def handle_command(self, command: str, params: Dict[str, Any], task_manager) -> Dict[str, Any]:
-        """
-        Handle a control command (pause, resume, kill, reroute) for tasks.
+        """Initialize interrupt handler."""
+        self.pending_interrupts: Dict[str, Dict[str, Any]] = {}
+    
+    def handle_command(self, command: str, params: Dict[str, Any], task_manager: Any) -> None:
+        """Handle a control command for a task.
+        
         Args:
-            command (str): The control command.
-            params (dict): Parameters, e.g., task_id.
-            task_manager: The TaskManager instance.
-        Returns:
-            dict: Result of the operation.
+            command: Command type (pause, resume, kill, reroute)
+            params: Command parameters including task_id
+            task_manager: TaskManager instance
         """
         task_id = params.get("task_id")
-        with self._lock:
-            if command == "pause" and task_id:
-                self.interrupts[task_id] = "pause"
-                return {"status": "paused", "task_id": task_id}
-            elif command == "resume" and task_id:
+        if not task_id:
+            raise ValueError("task_id required in command parameters")
+            
+        task = task_manager.get_task(task_id)
+        if not task:
+            raise ValueError(f"Task {task_id} not found")
+            
+        if command == "pause":
+            self.pending_interrupts[task_id] = {
+                "type": "pause",
+                "applied": False
+            }
+        elif command == "resume":
+            if task_id in self.pending_interrupts:
+                del self.pending_interrupts[task_id]
+            task_manager.update_task(task_id, {"status": "pending"})
+        elif command == "kill":
+            self.pending_interrupts[task_id] = {
+                "type": "kill",
+                "applied": False
+            }
+        elif command == "reroute":
+            self.pending_interrupts[task_id] = {
+                "type": "reroute",
+                "applied": False
+            }
+        else:
+            raise ValueError(f"Unknown command: {command}")
+    
+    def check_interrupts(self, task_manager: Any) -> None:
+        """Apply pending interrupts to tasks.
+        
+        Args:
+            task_manager: TaskManager instance
+        """
+        for task_id, interrupt in list(self.pending_interrupts.items()):
+            if not interrupt["applied"]:
                 task = task_manager.get_task(task_id)
-                if task and task["status"] == "paused":
-                    task["status"] = "pending"
-                    return {"status": "resumed", "task_id": task_id}
-                return {"status": "not_paused", "task_id": task_id}
-            elif command == "kill" and task_id:
-                self.interrupts[task_id] = "kill"
-                return {"status": "killed", "task_id": task_id}
-            elif command == "reroute" and task_id:
-                self.interrupts[task_id] = "reroute"
-                return {"status": "rerouted", "task_id": task_id}
-            else:
-                return {"status": "unknown_command", "command": command, "params": params} 
+                if not task:
+                    del self.pending_interrupts[task_id]
+                    continue
+                    
+                if interrupt["type"] == "pause":
+                    task_manager.update_task(task_id, {"status": "paused"})
+                elif interrupt["type"] == "kill":
+                    task_manager.update_task(task_id, {"status": "killed"})
+                elif interrupt["type"] == "reroute":
+                    task_manager.update_task(task_id, {"status": "pending"})
+                    
+                interrupt["applied"] = True
+    
+    def has_pending_interrupts(self) -> bool:
+        """Check if there are any pending interrupts.
+        
+        Returns:
+            Boolean indicating if there are pending interrupts
+        """
+        return any(not interrupt["applied"] for interrupt in self.pending_interrupts.values()) 
