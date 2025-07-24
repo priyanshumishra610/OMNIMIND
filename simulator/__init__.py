@@ -1,9 +1,6 @@
 """
-OMNIMIND Simulator Module
-
-This module handles simulation sandbox operations for world modeling.
+Simulator Package Initialization
 """
+from .simulator import SimulationEngine
 
-from .simulator import SimulationSandbox
-
-__all__ = ["SimulationSandbox"] 
+__all__ = ['SimulationEngine'] 

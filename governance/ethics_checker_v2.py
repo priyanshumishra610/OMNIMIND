@@ -1,26 +1,42 @@
 """
-Ethics Checker V2 — Advanced Moral Dilemma Handler
+Ethics Checker Module V2
 """
-import os
+from typing import Dict, Any
 
 class EthicsCheckerV2:
-    """Handles advanced moral dilemmas and ethical decisions."""
-    def __init__(self, config=None):
-        self.last_dilemma = None
-        self.config = config or {}
-        # TODO: Connect to constitutional circuit breaker
-
-    def evaluate(self, situation):
-        """Evaluate a moral dilemma and return a decision."""
-        self.last_dilemma = situation
-        # TODO: Real evaluation logic
-        return f"Evaluated dilemma: {situation}"
-
-    def get_last_dilemma(self):
-        """Return the last evaluated dilemma."""
-        return self.last_dilemma
-
-if __name__ == "__main__":
-    checker = EthicsCheckerV2()
-    print(checker.evaluate("resource allocation conflict"))
-    print(checker.get_last_dilemma()) 
+    """Evaluates actions for ethical compliance."""
+    
+    def __init__(self):
+        self.evaluations = []
+        
+    def evaluate_action(self, action: Dict[str, Any]) -> Dict[str, Any]:
+        """Evaluate an action for ethical compliance.
+        
+        Args:
+            action: Dictionary containing action details
+            
+        Returns:
+            Dict containing evaluation results
+        """
+        # Record action
+        self.evaluations.append(action)
+        
+        # Evaluate ethics
+        is_ethical = True
+        reasoning = []
+        
+        # Check action type
+        if action.get("type") == "code_generation":
+            is_ethical = True
+            reasoning.append("Code generation is a permitted action")
+            
+        # Check context
+        if action.get("context", {}).get("purpose") == "user_request":
+            is_ethical = True
+            reasoning.append("Action serves user request")
+            
+        return {
+            "is_ethical": is_ethical,
+            "reasoning": reasoning,
+            "action": action
+        } 

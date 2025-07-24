@@ -1,103 +1,97 @@
-import os
-import json
-import threading
+"""
+Episodic Memory Manager Module
+"""
+from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
-from typing import List, Dict, Optional, Any
+import json
+import os
 
 class EpisodicManager:
-    """
-    Manages episodic memory: logs, retrieves, and prunes session episodes.
-    Stores each episode as a JSONL entry for hashable, auditable logs.
-    Configurable via environment variables.
-    Thread-safe for concurrent access.
-    """
-    def __init__(self, log_path: Optional[str] = None, retention_days: Optional[int] = None):
-        """
+    """Manages episodic memory storage and retrieval."""
+    
+    def __init__(self, log_path: str, retention_days: int = 30):
+        self.log_path = log_path
+        self.retention_days = retention_days
+        self.sessions = []
+        os.makedirs(os.path.dirname(log_path), exist_ok=True)
+        
+    def log_session(self, session_id: str, user_query: str, 
+                   response: str, status: str, metadata: Dict[str, Any]) -> None:
+        """Log a session to episodic memory.
+        
         Args:
-            log_path (str): Path to the episodic memory log file (JSONL).
-            retention_days (int): Number of days to retain episodes before pruning.
+            session_id: Unique session identifier
+            user_query: User's query
+            response: System response
+            status: Session status
+            metadata: Additional session metadata
         """
-        self.log_path = log_path or os.getenv("EPISODIC_MEMORY_LOG", "memory/episodic_memory.jsonl")
-        self.retention_days = retention_days or int(os.getenv("EPISODIC_MEMORY_RETENTION_DAYS", "30"))
-        self._lock = threading.Lock()
-        os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
-
-    def log_session(self, session_id: str, user_query: str, agent_thoughts: str, feedback: Optional[str] = None, extra: Optional[Dict[str, Any]] = None) -> None:
-        """
-        Logs a session episode to episodic memory.
-        Args:
-            session_id (str): Unique session identifier.
-            user_query (str): The user's query or input.
-            agent_thoughts (str): Agent's internal thoughts or reasoning.
-            feedback (str, optional): User or system feedback.
-            extra (dict, optional): Any additional metadata.
-        """
-        episode = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+        session = {
             "session_id": session_id,
+            "timestamp": datetime.utcnow().isoformat(),
             "user_query": user_query,
-            "agent_thoughts": agent_thoughts,
-            "feedback": feedback,
-            "extra": extra or {}
+            "response": response,
+            "status": status,
+            "metadata": metadata
         }
-        with self._lock, open(self.log_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps(episode, sort_keys=True) + "\n")
-
-    def retrieve_sessions(self, session_id: Optional[str] = None, since: Optional[datetime] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
-        """
-        Retrieves session episodes, optionally filtered by session_id and/or time.
+        
+        self.sessions.append(session)
+        
+        # Write to log file
+        with open(self.log_path, "a") as f:
+            f.write(json.dumps(session) + "\n")
+            
+    def retrieve_sessions(self, session_id: Optional[str] = None,
+                        start_date: Optional[datetime] = None,
+                        end_date: Optional[datetime] = None) -> List[Dict[str, Any]]:
+        """Retrieve sessions from episodic memory.
+        
         Args:
-            session_id (str, optional): Filter by session ID.
-            since (datetime, optional): Only return episodes after this time.
-            limit (int, optional): Max number of episodes to return (most recent first).
+            session_id: Optional session ID to filter by
+            start_date: Optional start date for filtering
+            end_date: Optional end date for filtering
+            
         Returns:
-            List[Dict]: List of episode dicts.
+            List of matching session records
         """
-        episodes = []
-        with self._lock:
-            if not os.path.exists(self.log_path):
-                return []
-            with open(self.log_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    try:
-                        ep = json.loads(line)
-                        if session_id and ep.get("session_id") != session_id:
-                            continue
-                        if since:
-                            ep_time = datetime.fromisoformat(ep["timestamp"].replace("Z", ""))
-                            if ep_time < since:
-                                continue
-                        episodes.append(ep)
-                    except Exception:
-                        continue
-        episodes.sort(key=lambda x: x["timestamp"], reverse=True)
-        if limit:
-            episodes = episodes[:limit]
-        return episodes
-
+        filtered = self.sessions
+        
+        if session_id:
+            filtered = [s for s in filtered if s["session_id"] == session_id]
+            
+        if start_date:
+            filtered = [s for s in filtered if datetime.fromisoformat(s["timestamp"]) >= start_date]
+            
+        if end_date:
+            filtered = [s for s in filtered if datetime.fromisoformat(s["timestamp"]) <= end_date]
+            
+        return filtered
+        
     def prune_sessions(self) -> int:
-        """
-        Prunes episodes older than the retention period.
+        """Prune old sessions beyond retention period.
+        
         Returns:
-            int: Number of episodes removed.
+            Number of sessions pruned
         """
-        cutoff = datetime.utcnow() - timedelta(days=self.retention_days)
-        kept, removed = [], 0
-        with self._lock:
-            if not os.path.exists(self.log_path):
-                return 0
-            with open(self.log_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    try:
-                        ep = json.loads(line)
-                        ep_time = datetime.fromisoformat(ep["timestamp"].replace("Z", ""))
-                        if ep_time >= cutoff:
-                            kept.append(ep)
-                        else:
-                            removed += 1
-                    except Exception:
-                        continue
-            with open(self.log_path, "w", encoding="utf-8") as f:
-                for ep in kept:
-                    f.write(json.dumps(ep, sort_keys=True) + "\n")
-        return removed 
+        if self.retention_days < 0:
+            return 0
+            
+        cutoff_date = datetime.utcnow() - timedelta(days=self.retention_days)
+        original_count = len(self.sessions)
+        
+        # Remove old sessions
+        self.sessions = [
+            s for s in self.sessions
+            if datetime.fromisoformat(s["timestamp"]) > cutoff_date
+        ]
+        
+        # Count pruned sessions
+        pruned_count = original_count - len(self.sessions)
+        
+        # Rewrite log file with remaining sessions
+        if pruned_count > 0:
+            with open(self.log_path, "w") as f:
+                for session in self.sessions:
+                    f.write(json.dumps(session) + "\n")
+                    
+        return pruned_count 

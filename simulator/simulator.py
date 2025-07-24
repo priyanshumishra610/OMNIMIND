@@ -1,125 +1,103 @@
 """
-Simulation Sandbox for OMNIMIND
-
-Handles world modeling and simulation when real facts are insufficient.
+Simulation Engine Module
 """
+from typing import Dict, Any
+from datetime import datetime
 
-from typing import List, Dict, Any, Optional
-import logging
-import json
-from .symbolic_engine import SymbolicEngine
-
-logger = logging.getLogger(__name__)
-
-
-class SimulationSandbox:
-    """Sandbox environment for running simulations and world modeling."""
+class SimulationEngine:
+    """Engine for running simulations and scenarios."""
     
-    def __init__(self, sandbox_name: str = "omnimind_sandbox"):
-        self.sandbox_name = sandbox_name
-        self.simulation_history = []
-        self.world_models = {}
-    
+    def __init__(self):
+        self.simulations = []
+        self.current_state = {}
+        
     def run_simulation(self, scenario: Dict[str, Any]) -> Dict[str, Any]:
-        """Run a simulation with given scenario parameters."""
-        try:
-            simulation_id = f"sim_{len(self.simulation_history) + 1}"
+        """Run a simulation scenario.
+        
+        Args:
+            scenario: Dictionary containing scenario parameters
             
-            # Extract simulation parameters
-            initial_state = scenario.get("initial_state", {})
-            rules = scenario.get("rules", [])
-            steps = scenario.get("steps", 10)
+        Returns:
+            Dict containing simulation results
+        """
+        # Record simulation
+        simulation_record = {
+            "id": f"sim_{len(self.simulations)}",
+            "timestamp": datetime.utcnow().isoformat(),
+            "scenario": scenario,
+            "initial_state": self.current_state.copy()
+        }
+        
+        # Run simulation steps
+        results = self._process_scenario(scenario)
+        
+        # Update state
+        self.current_state.update(results.get("final_state", {}))
+        
+        # Store results
+        simulation_record.update({
+            "results": results,
+            "final_state": self.current_state.copy()
+        })
+        
+        self.simulations.append(simulation_record)
+        return results
+        
+    def _process_scenario(self, scenario: Dict[str, Any]) -> Dict[str, Any]:
+        """Process a simulation scenario.
+        
+        Args:
+            scenario: Dictionary containing scenario data
             
-            # Run simulation steps
-            current_state = initial_state.copy()
-            simulation_steps = []
+        Returns:
+            Dict containing processed results
+        """
+        results = {
+            "final_state": {},
+            "improvements": [],
+            "risks": []
+        }
+        
+        # Process initial state
+        if "initial_state" in scenario:
+            results["final_state"].update(scenario["initial_state"])
             
-            for step in range(steps):
-                step_result = self._simulate_step(current_state, rules, step)
-                simulation_steps.append(step_result)
-                current_state = step_result.get("new_state", current_state)
+        # Process proposed changes
+        if "proposed_changes" in scenario:
+            for change in scenario["proposed_changes"]:
+                impact = self._calculate_impact(change)
+                if impact["type"] == "improvement":
+                    results["improvements"].append(impact)
+                elif impact["type"] == "risk":
+                    results["risks"].append(impact)
+                    
+        return results
+        
+    def _calculate_impact(self, change: str) -> Dict[str, Any]:
+        """Calculate the impact of a proposed change.
+        
+        Args:
+            change: String describing the change
             
-            simulation_result = {
-                "simulation_id": simulation_id,
-                "scenario": scenario,
-                "steps": simulation_steps,
-                "final_state": current_state,
-                "status": "completed"
-            }
-            
-            self.simulation_history.append(simulation_result)
-            return simulation_result
-            
-        except Exception as e:
-            logger.error(f"Error running simulation: {e}")
+        Returns:
+            Dict containing impact assessment
+        """
+        # Simple impact calculation
+        if "optimize" in change:
             return {
-                "simulation_id": "failed",
-                "error": str(e),
-                "status": "failed"
+                "type": "improvement",
+                "description": f"Performance improvement from {change}",
+                "confidence": 0.8
             }
-    
-    def _simulate_step(self, current_state: Dict[str, Any], 
-                      rules: List[Dict[str, Any]], step: int) -> Dict[str, Any]:
-        """Simulate a single step in the simulation."""
-        # Placeholder for actual simulation logic
-        new_state = current_state.copy()
-        
-        # Apply rules (placeholder)
-        for rule in rules:
-            if rule.get("condition", True):
-                action = rule.get("action", "no_action")
-                if action == "increment":
-                    key = rule.get("target", "counter")
-                    new_state[key] = new_state.get(key, 0) + 1
-        
-        return {
-            "step": step,
-            "current_state": current_state,
-            "new_state": new_state,
-            "applied_rules": len(rules)
-        }
-    
-    def add_world_model(self, model_name: str, model_rules: List[Dict[str, Any]]):
-        """Add a world model with specific rules."""
-        self.world_models[model_name] = {
-            "rules": model_rules,
-            "created_at": "now"  # Placeholder timestamp
-        }
-    
-    def get_simulation_history(self) -> List[Dict[str, Any]]:
-        """Get simulation history."""
-        return self.simulation_history.copy()
-    
-    def get_world_models(self) -> Dict[str, Any]:
-        """Get available world models."""
-        return self.world_models.copy() 
-
-class WorldSimulator:
-    """
-    Simulates hypothetical scenarios using symbolic logic and causal rules.
-    """
-    def __init__(self, rules: Optional[List[Dict[str, Any]]] = None):
-        self.engine = SymbolicEngine()
-        if rules:
-            for rule in rules:
-                self.engine.add_rule(rule)
-
-    def simulate(self, facts: Dict[str, Any], query: str) -> List[Dict[str, Any]]:
-        """
-        Given partial facts and a query, generate hypothetical scenarios.
-        Returns a list of scenario dicts with likelihood scores.
-        """
-        logger.info(f"Simulating scenarios for query: {query} with facts: {facts}")
-        scenarios = []
-        for hypothesis in self.engine.generate_hypotheses(facts, query):
-            result, trace = self.engine.infer({**facts, **hypothesis})
-            score = self.engine.score_scenario(result, trace)
-            scenarios.append({
-                "hypothesis": hypothesis,
-                "result": result,
-                "trace": trace,
-                "score": score
-            })
-        scenarios.sort(key=lambda x: x["score"], reverse=True)
-        logger.info(f"Generated {len(scenarios)} hypothetical scenarios.")
-        return scenarios 
+        elif "refactor" in change:
+            return {
+                "type": "improvement",
+                "description": f"Code quality improvement from {change}",
+                "confidence": 0.7
+            }
+        else:
+            return {
+                "type": "risk",
+                "description": f"Unknown impact from {change}",
+                "confidence": 0.4
+            } 

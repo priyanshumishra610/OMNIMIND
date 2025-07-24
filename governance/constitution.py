@@ -1,39 +1,42 @@
 """
-AGI Constitution - Alignment Principles & Policy Vault
+Governance Constitution Module
 """
-import os
-from dataclasses import dataclass
+import logging
+import json
+from datetime import datetime
+from typing import Dict, Any
 
-@dataclass
-class ConstitutionConfig:
-    """Configuration for AGI constitution."""
-    governance_id: str = None
-    policy_version: str = "1.0"
-    enforcement_level: str = "strict"
-
-class Constitution:
-    """AGI alignment principles and policy management."""
+class GovernanceLogger:
+    """Logger for governance actions and decisions."""
     
-    def __init__(self, config=None):
-        """Initialize with optional config override."""
-        self.config = config or ConstitutionConfig()
-        self.gov_id = os.environ.get('OMEGA_GOVERNANCE_ID', 'default')
-        # TODO: Initialize policy vault
+    def __init__(self):
+        self.logger = logging.getLogger("governance")
+        self.logger.setLevel(logging.INFO)
         
-    def verify_alignment(self, action):
-        """Check if action aligns with constitutional principles."""
-        # TODO: Implement alignment verification
-        return f"Alignment verified for: {action}"
+        # Create handlers if none exist
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter(
+                '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+
+    def log_action(self, action: Dict[str, Any]) -> Dict[str, Any]:
+        """Log a governance action.
         
-    def update_policy(self, new_policy):
-        """Safely update constitutional policies."""
-        # TODO: Implement policy updates
-        return f"Policy updated: {new_policy}"
-
-def main():
-    constitution = Constitution()
-    print(constitution.verify_alignment("test_action"))
-    print(constitution.update_policy("new_rule"))
-
-if __name__ == "__main__":
-    main() 
+        Args:
+            action: Dictionary containing action details
+            
+        Returns:
+            Dict containing the logged entry
+        """
+        log_entry = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "action_type": action.get("type"),
+            "result": action.get("result"),
+            "reason": action.get("reason")
+        }
+        
+        self.logger.info(json.dumps(log_entry))
+        return log_entry 

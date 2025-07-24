@@ -294,45 +294,131 @@ class TestPipeline:
             os.unlink(temp_file)
 
 
-class TestFastAPIEndpoints:
-    """Test FastAPI endpoints."""
+class TestAPIEndpoints:
+    """Test API endpoints."""
     
-    def test_health_endpoint(self):
-        """Test health endpoint."""
-        from main import app
+    def test_health_check(self):
+        """Test basic health check endpoint."""
         from fastapi.testclient import TestClient
+        from api.routes.health import router as health_router
         
-        client = TestClient(app)
+        client = TestClient(health_router)
         response = client.get("/health")
         
         assert response.status_code == 200
         data = response.json()
-        assert data["status"] == "healthy"
-        assert data["service"] == "OMNIMIND"
+        assert "status" in data
+        assert "timestamp" in data
+        assert data["status"] == "ok"
     
-    def test_search_endpoint(self):
-        """Test search endpoint."""
-        from main import app
+    @patch("vectordb.vectordb.VectorDB")
+    @patch("embedder.embedder.MultiModelEmbedder")
+    def test_vector_search(self, mock_embedder_class, mock_vectordb_class):
+        """Test vector search endpoint with mocked dependencies."""
         from fastapi.testclient import TestClient
+        from api.routes.search import router as search_router
         
-        client = TestClient(app)
+        # Mock embedder
+        mock_embedder = Mock()
+        mock_embedder.embed_text.return_value = [0.1, 0.2, 0.3]  # Mock embedding vector
+        mock_embedder_class.return_value = mock_embedder
         
-        # Test search request
-        search_data = {
-            "query": "OMNIMIND cognitive kernel",
-            "top_k": 3,
-            "collection_name": "omnimind_docs"
+        # Mock vectordb
+        mock_vectordb = Mock()
+        mock_vectordb.search.return_value = [
+            {"id": "1", "text": "Test result 1", "similarity": 0.9},
+            {"id": "2", "text": "Test result 2", "similarity": 0.8}
+        ]
+        mock_vectordb_class.return_value = mock_vectordb
+        
+        client = TestClient(search_router)
+        response = client.post(
+            "/search",
+            json={
+                "query": "test query",
+                "collection": "test_collection",
+                "top_k": 2
+            }
+        )
+        
+        assert response.status_code == 200
+        data = response.json()
+        assert "results" in data
+        assert len(data["results"]) == 2
+        assert data["results"][0]["score"] == 0.9
+        assert data["results"][0]["text"] == "Test result 1"
+        
+        # Verify mocks were called correctly
+        mock_embedder.embed_text.assert_called_once_with("test query")
+        mock_vectordb.search.assert_called_once_with(
+            "test_collection",
+            [0.1, 0.2, 0.3],
+            top_k=2
+        )
+    
+    @patch("kg.kg_manager.KnowledgeGraphManager")
+    def test_kg_query(self, mock_kg_class):
+        """Test knowledge graph query endpoint with mocked dependencies."""
+        from fastapi.testclient import TestClient
+        from api.routes.knowledge import router as kg_router
+        
+        # Mock KG manager
+        mock_kg = Mock()
+        mock_kg.query.return_value = {
+            "entities": [
+                {
+                    "id": "e1",
+                    "type": "concept",
+                    "name": "Test Entity",
+                    "properties": {"key": "value"}
+                }
+            ],
+            "relationships": [
+                {
+                    "source": "e1",
+                    "target": "e2",
+                    "type": "related_to",
+                    "properties": {"weight": 0.8}
+                }
+            ]
         }
+        mock_kg_class.return_value = mock_kg
         
-        response = client.post("/search", json=search_data)
+        client = TestClient(kg_router)
+        response = client.post(
+            "/kg/query",
+            json={
+                "query": "test query",
+                "limit": 10
+            }
+        )
         
-        # Should return 200 even if no data (empty results)
-        assert response.status_code in [200, 500]  # 500 if no collection exists yet
-        if response.status_code == 200:
-            data = response.json()
-            assert "query" in data
-            assert "results" in data
-            assert "kg_context" in data
+        assert response.status_code == 200
+        data = response.json()
+        assert "entities" in data
+        assert "relationships" in data
+        assert len(data["entities"]) == 1
+        assert len(data["relationships"]) == 1
+        
+        # Verify entity data
+        entity = data["entities"][0]
+        assert entity["id"] == "e1"
+        assert entity["type"] == "concept"
+        assert entity["name"] == "Test Entity"
+        assert entity["properties"] == {"key": "value"}
+        
+        # Verify relationship data
+        relationship = data["relationships"][0]
+        assert relationship["source"] == "e1"
+        assert relationship["target"] == "e2"
+        assert relationship["type"] == "related_to"
+        assert relationship["properties"] == {"weight": 0.8}
+        
+        # Verify mock was called correctly
+        mock_kg.query.assert_called_once_with(
+            query="test query",
+            limit=10
+        )
 
 
 if __name__ == "__main__":

@@ -1,3 +1,6 @@
+"""
+Test Memory Components
+"""
 import os
 import tempfile
 import shutil
@@ -40,7 +43,6 @@ def test_episodic_manager():
         # Verify all sessions were pruned
         remaining = manager.retrieve_sessions()
         assert len(remaining) == 0
-
 
 def test_semantic_manager():
     """Test clustering and semantic search."""
@@ -85,7 +87,8 @@ def test_memory_reasoner():
         # Episodic
         epi_path = os.path.join(tmpdir, "epi.jsonl")
         epi = EpisodicManager(log_path=epi_path)
-        epi.log_session("s1", "foo", "bar", "fb")
+        epi.log_session("s1", "foo", "bar", "good", {"test": True})
+        
         # Semantic
         from vectordb import VectorDB
         db = VectorDB(db_path=tmpdir)
@@ -94,10 +97,12 @@ def test_memory_reasoner():
         from kg import KnowledgeGraphManager
         kg = KnowledgeGraphManager(use_neo4j=False)
         sem = SemanticManager(vectordb=db, kg_manager=kg, collection_name="test", n_clusters=1)
+        
         # Procedural
         proc_path = os.path.join(tmpdir, "proc.jsonl")
         proc = ProceduralManager(workflow_path=proc_path)
         proc.save_workflow("wf1", [{"name": "step1"}], description="foo")
+        
         # Reasoner
         reasoner = MemoryReasoner(epi, sem, proc)
         results = reasoner.search_memory("foo", query_embedding=[1.0, 0.0], top_k=1)

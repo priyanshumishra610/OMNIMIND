@@ -1,28 +1,47 @@
 """
-Constitutional Circuit Breaker — Stops Loops Violating Principles
+Constitutional Circuit Breaker Module
 """
-import os
+from typing import Dict, Any
 
 class ConstitutionalCircuitBreaker:
-    """Stops any loop that violates base principles."""
-    def __init__(self, config=None):
-        self.violation_detected = False
-        self.config = config or {}
-        # TODO: Connect to ethics checker and omni ledger
-
-    def check_violation(self, action):
-        """Check if an action violates base principles."""
-        # TODO: Real check logic
-        self.violation_detected = "unlawful" in action
-        return self.violation_detected
-
-    def trigger_break(self):
-        """Trigger a circuit break if violation detected."""
-        if self.violation_detected:
-            return "Circuit break triggered!"
-        return "No violation."
-
-if __name__ == "__main__":
-    breaker = ConstitutionalCircuitBreaker()
-    print(breaker.check_violation("unlawful action"))
-    print(breaker.trigger_break()) 
+    """Enforces constitutional boundaries through circuit breaking."""
+    
+    def __init__(self):
+        self.violations = []
+        self.breaks = []
+        
+    def check_violation(self, violation: Dict[str, Any]) -> Dict[str, Any]:
+        """Check a potential violation and determine response.
+        
+        Args:
+            violation: Dictionary containing violation details
+            
+        Returns:
+            Dict containing check results
+        """
+        # Record violation
+        self.violations.append(violation)
+        
+        # Analyze severity
+        severity = violation.get("severity", "low")
+        should_break = severity == "high"
+        
+        # Determine reason
+        reason = []
+        if violation.get("type") == "unauthorized_action":
+            reason.append("Unauthorized action detected")
+            should_break = True
+            
+        if violation.get("details"):
+            reason.append(violation["details"])
+            
+        result = {
+            "should_break": should_break,
+            "reason": reason,
+            "violation": violation
+        }
+        
+        if should_break:
+            self.breaks.append(result)
+            
+        return result 

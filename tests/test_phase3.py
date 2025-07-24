@@ -1,26 +1,64 @@
+"""
+Test Simulation Components
+"""
 import pytest
-from simulator.simulator import WorldSimulator
-from simulator.symbolic_engine import SymbolicEngine
-from logger.hypothetical_logger import HypotheticalLogger
+from simulator.simulator import SimulationEngine
+from world_model.environment import Environment
+from world_model.predictor import Predictor
 
-def test_symbolic_engine_rules():
-    engine = SymbolicEngine()
-    engine.add_rule({"if": [("A", True)], "then": ("B", True)})
-    facts = {"A": True}
-    result, trace = engine.infer(facts)
-    assert result["B"] is True
-    assert trace
+def test_simulation_engine():
+    """Test simulation engine functionality."""
+    engine = SimulationEngine()
+    
+    scenario = {
+        "initial_state": {
+            "efficiency": 0.7,
+            "error_rate": 0.3
+        },
+        "proposed_changes": [
+            "optimize_performance",
+            "reduce_errors"
+        ]
+    }
+    
+    result = engine.run_simulation(scenario)
+    assert isinstance(result, dict)
+    assert "improvements" in result
+    assert "risks" in result
 
-def test_world_simulator_scenarios():
-    sim = WorldSimulator(rules=[{"if": [("A", True)], "then": ("B", True)}])
-    facts = {"A": None}
-    scenarios = sim.simulate(facts, "If A is true, what about B?")
-    assert isinstance(scenarios, list)
-    assert any("result" in s for s in scenarios)
+def test_environment_generation():
+    """Test environment generation and state management."""
+    env = Environment()
+    
+    config = {
+        "complexity": "medium",
+        "variables": ["code_quality", "system_load"],
+        "constraints": {"resources": "limited"}
+    }
+    
+    result = env.generate(config)
+    assert isinstance(result, dict)
+    assert "state" in result
+    assert "variables" in result
+    assert "constraints" in result
 
-def test_hypothetical_logger():
-    logger = HypotheticalLogger(log_path="logs/test_hypotheticals.jsonl")
-    entry = {"query": "test", "scenarios": [{"result": {"A": True}}]}
-    logger.log(entry)
-    logs = logger.get_logs(limit=1)
-    assert logs and logs[0]["query"] == "test" 
+def test_consequence_prediction():
+    """Test consequence prediction functionality."""
+    predictor = Predictor()
+    
+    actions = [
+        {"type": "refactor", "target": "error_handling"},
+        {"type": "optimize", "target": "performance"}
+    ]
+    
+    current_state = {
+        "code_quality": 0.6,
+        "system_performance": 0.7,
+        "technical_debt": 0.4
+    }
+    
+    result = predictor.predict_consequences(actions, current_state)
+    assert isinstance(result, dict)
+    assert "future_states" in result
+    assert "risks" in result
+    assert "opportunities" in result 
