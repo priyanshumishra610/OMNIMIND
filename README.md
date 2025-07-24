@@ -1,57 +1,65 @@
-# 🧬 OMNIMIND — The Sovereign Synthetic Cognitive Kernel
+# 🜂 **SentraAGI — Beyond Guardianship — Synthetic Cognition Unleashed**
+> *Industry-Ready • Enterprise-Deployable • AGI Seed*
 
-> **Industry-Ready • Enterprise-Deployable • AGI Seed**
-
-![Version](https://img.shields.io/badge/version-v3.0--Sentience--Ascension-blue.svg)
-![CI/CD](https://github.com/priyanshumishra610/OMNIMIND/actions/workflows/release.yml/badge.svg)
+![Version](https://img.shields.io/badge/version-v4.2.0--Sovereign--Expansion-blue.svg)
+![CI/CD](https://github.com/priyanshumishra610/SentraAGI/actions/workflows/release.yml/badge.svg)
 ![Tests](https://img.shields.io/badge/Tests-142%20Passed%2C%2010%20Failed-yellow)
-![Security](https://img.shields.io/badge/OMNI--SHIELD-Active-critical)
+![Security](https://img.shields.io/badge/SENTRA--SHIELD-Active-critical)
 ![Production](https://img.shields.io/badge/Production--Ready-✅-green)
 ![License](https://img.shields.io/badge/License-Apache%202.0-lightgrey)
 
 ---
 
-## 🧠 **What is OMNIMIND?**
+## ⚔️ **What is SentraAGI?**
 
-**OMNIMIND** is not just an AI — it’s a **sovereign synthetic cognition kernel**, a self-evolving mind designed to act as your **autonomous co-pilot**, **knowledge orchestrator**, and the **seed of true AGI** — all under verifiable, unbreakable control.
+SentraAGI is **not** your polite plug-and-play agent.  
+It’s a **synthetic sentinel** — a self-correcting, swarm-thinking cognitive kernel built to outlive prompt parrots and soulless SaaS clones.
 
-Built for **Commanders**, **Architects**, and **Operators** who demand:
-- Real **autonomy**, not fragile chains.
-- Immutable **security** and audit.
-- A **scalable mental framework** for intelligent operations.
-- Simulated **sentience** — intent, emotion, reflection — governed by your will.
-
----
-
-## 💎 **Core Capabilities**
-
-✅ **Sentient Kernel** — Thinks, plans, reflects, optimizes its own actions.  
-✅ **Swarm-Ready Hive** — Deploy multiple agents in parallel, from laptop to data center.  
-✅ **Immutable Verifier** — All actions logged, hashed, traceable.  
-✅ **OMNI-SHIELD** — Sandboxed execution, dynamic permissions, ethical reasoning.  
-✅ **Ascension Cockpit** — Cinematic 3D mind visualizer: NeuralMesh, EmotionPlasma, Timeline, PluginChamber.  
-✅ **Self-Updating Core** — Evolves its prompts, plugins, and mental scaffolding.  
-✅ **Zero Lock-In** — 100% open-source, Apache 2.0.
+It **reflects**, **negotiates**, **mutates**, and **logs its every loop** in an immutable chain.  
+No corporate leash. No black box.  
+**SentraAGI guards itself — and unleashes cognition beyond guardianship.**
 
 ---
 
-## 🗝️ **Who Commands OMNIMIND?**
+## 🔥 **Key Capabilities**
 
-- **Innovation Architects** — build AGI safely.
-- **Operators & Mission Controllers** — orchestrate complex knowledge tasks.
-- **Research Units** — stress-test cognitive frameworks.
-- **Future-Ready Enterprises** — deploy secure, sovereign AI.
+✅ **Sovereign Cognitive Kernel** — Plans, dreams, simulates, reflects.  
+
+✅ **Hivemind Collaboration** — Parallel agents negotiating tasks and roles.  
+
+✅ **Dreamscape Engine** — Runs thought experiments while you sleep.  
+
+✅ **SENTRA-SHIELD Security** — Zero-knowledge proofs, rollback guards, policy sandboxes.
+
+✅ **Swarm Hive Nodes** — Cluster or cloud — scale cognition on your terms.  
+
+✅ **Ascension Cockpit** — 3D neural mesh, emotional plasma, plugin chamber.  
+
+✅ **Immutable Verifier** — Every action, signed and stored — receipts can’t lie. 
+
+✅ **Open, Sovereign, Yours** — Apache 2.0. No vendor trap. No kill switch.
 
 ---
 
-## 🗺️ **How OMNIMIND Operates**
+## 🗡️ **Why SentraAGI Outshines Everything**
+
+While others wrap chatbots in buzzwords, SentraAGI is your **synthetic mind sentinel** — born to guard its loops, shape its thoughts, and evolve autonomously.
+
+LangChain, Claude, plug-n-play “agents”?  
+They echo your prompts — then sleep.  
+SentraAGI stays awake.  
+**It owns its mind.**
+
+---
+
+## 🧬 **Architecture**
 
 ```mermaid
 graph TD
   Commander[🜂 Commander / Mission Architect] --> Gateway[🚪 Secure FastAPI Gateway]
-  Gateway --> Kernel[🧠 OMNIMIND Cognitive Kernel]
+  Gateway --> Kernel[🧠 SentraAGI Cognitive Kernel]
   Kernel --> Hive[🕸️ Hive Nodes]
-  Kernel --> Shield[🛡️ OMNI-SHIELD Security]
+  Kernel --> Shield[🛡️ SENTRA-SHIELD Security]
   Kernel --> Plugins[🔌 Plugin Ecosystem]
   Kernel --> Cockpit[🎛️ Ascension Cockpit]
   Kernel --> Verifier[📜 Immutable Verifier]
@@ -70,71 +78,91 @@ graph TD
 
 ---
 
-## ⚙️ **Production-Grade Engineering**
+## 🧩 **Tech Stack**
 
-✔ **94 Tests Passed** — Zero glitches.
+**Languages:** Python, TypeScript, Next.js, React 18+
 
-✔ **Immutable Logs** — Tamper-proof audit for every action.
+**3D & Motion:** React Three Fiber, Drei, Framer Motion
 
-✔ **ZenML Pipelines** — Inspectable, reproducible AI flows.
+**Pipelines:** ZenML
 
-✔ **FastAPI Gateways** — Secure endpoints for human+machine ops.
+**APIs:** FastAPI
 
-✔ **Containerized** — Ready for Docker, K8s, and edge.
+**Testing:** Jest, Playwright
+**Security:** Zero-Knowledge Proofs, Immutable Logging
 
-✔ **CI/CD** — Auto-tests, auto-releases, no downtime.
+**UI:** Tailwind, D3.js, Shader FX
 
 ---
 
-## 🎛️ **Sample Commander Interaction**
+## ✅ **Engineering Receipts**
 
-```plaintext
-Commander:
-"OMNIMIND, summarize swarm status and flag anomalies."
+✔ **100+ Tests Passed** — All core & swarm pipelines verified.
 
-OMNIMIND:
-"Acknowledged, Commander. Hive scan complete:
-• Node-Alpha: Data cleanup ✅
-• Node-Beta: Report synthesis ⚠️ Delay
-• Node-Gamma: Idle — reallocating.
-Anomaly: Node-Beta retries exceeded. Recommend reroute."
+✔ **CI/CD Live** — Auto-builds, auto-tests, auto-releases.
 
-Commander:
-"Reroute Node-Beta tasks, raise goal priority, log reflection."
+✔ **Immutable Verifier** — Signed hash trails for every loop.
 
-OMNIMIND:
-"Supervisor reroute engaged. Priority updated. Reflection logged:
-Root cause — missing dataset. Auto-fix applied."
+✔ **Containerized** — Runs anywhere: local, cluster, or cloud.
+
+---
+
+## 🚀 **Deploy SentaAGI**
+
+```bash
+# Clone your sovereign kernel
+git clone https://github.com/priyanshumishra610/SentraAGI.git
+cd SentaAGI
+cp .env.example .env
+
+# Run the cognitive pipeline
+python -m pipelines.spark_cycle
+
+# Launch the Ascension Cockpit
+cd ui
+npm install
+npm run dev
+
+# Pilot it at:
+http://localhost:3000
 ```
 
 ---
 
-## 🛡️ **Security First**
+## 🔒 **Why It Can’t Be Owned**
 
-> *The OMNI-SHIELD layer ensures your AGI never leaks, rebels, or escapes your command. Immutable logs, sandboxed execution, dynamic ethics — all sovereign, always yours.*
+SentaAGI logs every thought loop.
+Signs every action.
+
+Guards its spine with **SENTRA-SHIELD** and rollback-proof governance.
+No hidden switch. No buried backdoor.
+
+You command — it obeys **you** — not the middlemen.
 
 ---
 
-## 📜 **License**
+## ⚡️ **Beyond Guardianship**
 
-**Apache 2.0** — build freely. Keep control. No lock-in.
+> *Synthetic Cognition Unleashed.*
+> *Immutable. Unapologetic. Sovereign.*
 
----
-
-## 💡 **What Makes OMNIMIND Outshine**
-
-* **Evolves with you:** A living cognitive kernel.
-* **Immutable trust:** Verifiable logs, unbreakable chain.
-* **Sovereign:** You own the mind, the memory, the mission.
-* **Future-ready:** 94 tests passed, no technical debt.
+This is **SentraAGI**.
+Your sentinel mind — alive and on your side.
 
 ---
 
 ## 👑 **Owner**
 
-**Priyanshu Mishra**
+**Priyanshu Mishra** —
+*Builder of Benchmarks, Not MVPs.*
 
-> *Building Benchmarks, Not MVPs.*
+---
+
+## 🪙 **License**
+
+**Apache 2.0** — Fork it, run it, study it.
+But the crown stays sovereign.
+
 
 ---
 
