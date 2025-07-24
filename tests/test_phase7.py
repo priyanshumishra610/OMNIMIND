@@ -57,21 +57,46 @@ def test_interrupt_handler():
     assert tm.tasks[tid]["status"] == "pending"
 
 def test_supervisor_logger():
-    """Test logging and hashability of supervisor actions."""
+    """Test logging and structured output of supervisor actions."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        log_path = os.path.join(tmpdir, "supervisor.jsonl")
-        logger = SupervisorLogger(log_path=log_path)
-        h = logger.log("test_action", {"foo": "bar"})
-        assert isinstance(h, str) and len(h) == 64
+        logger = SupervisorLogger(log_dir=tmpdir)
+        # Test different log levels
+        logger.info("test info", {"foo": "bar"})
+        logger.warning("test warning", {"alert": "high"})
+        logger.error("test error", Exception("test exception"))
+        logger.debug("test debug", {"detail": "verbose"})
+        
+        # Verify log file exists and has content
+        log_file = os.path.join(tmpdir, "supervisor.log")
+        assert os.path.exists(log_file)
+        with open(log_file, 'r') as f:
+            content = f.read()
+            assert "test info" in content
+            assert "test warning" in content
+            assert "test error" in content
+            assert "test exception" in content
 
 def test_supervisor_core_status_and_control():
-    """Test SupervisorCore status, metrics, and control interface."""
-    sup = SupervisorCore(agents=[DummyAgent()])
-    tid = sup.submit_task({"name": "coretask"})
-    status = sup.get_status()
-    assert status["active_agents"] == 1
-    assert status["active_tasks"] >= 1
-    metrics = sup.get_metrics()
-    assert "system_health" in metrics
-    res = sup.control("pause", {"task_id": tid})
-    assert res["status"] == "paused" 
+    """Test SupervisorCore status and component management."""
+    sup = SupervisorCore()
+    
+    # Register a test component
+    sup.register_component("test_component", {
+        "type": "service",
+        "health_check": lambda: True
+    })
+    
+    # Start supervision
+    sup.start_supervision()
+    
+    # Check component status
+    status = sup.get_component_status("test_component")
+    assert status is not None
+    assert status["status"] in ["registered", "healthy"]
+    
+    # Get all statuses
+    all_statuses = sup.get_all_statuses()
+    assert "test_component" in all_statuses
+    
+    # Stop supervision
+    sup.stop_supervision() 

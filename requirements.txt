@@ -11,3 +11,4 @@ zenml
 prometheus-client
 flake8 
 evidently 
+scrapy>=2.11.2 

@@ -13,20 +13,33 @@ def test_episodic_manager():
     with tempfile.TemporaryDirectory() as tmpdir:
         log_path = os.path.join(tmpdir, "episodic.jsonl")
         manager = EpisodicManager(log_path=log_path, retention_days=0)  # Use 0 to trigger pruning
-        manager.log_session("sess1", "What is AI?", "Thinking about AI", "Good", {"foo": "bar"})
         
-        # Should retrieve 1 session before pruning
-        sessions = manager.retrieve_sessions(session_id="sess1")
-        assert len(sessions) == 1
-        assert sessions[0]["user_query"] == "What is AI?"
+        # Add multiple test sessions
+        test_sessions = [
+            ("sess1", "What is AI?", "Thinking about AI", "Good", {"foo": "bar"}),
+            ("sess2", "How does ML work?", "Explaining ML", "Good", {"topic": "ml"}),
+            ("sess3", "Tell me about NLP", "Discussing NLP", "Good", {"field": "nlp"})
+        ]
         
-        # Should prune the old session (retention_days = 0)
+        for session in test_sessions:
+            manager.log_session(*session)
+        
+        # Verify sessions were added
+        all_sessions = manager.retrieve_sessions()
+        assert len(all_sessions) == len(test_sessions)
+        
+        # Test retrieval by session ID
+        sess1 = manager.retrieve_sessions(session_id="sess1")
+        assert len(sess1) == 1
+        assert sess1[0]["user_query"] == "What is AI?"
+        
+        # Test pruning (retention_days = 0 should remove all sessions)
         removed = manager.prune_sessions()
-        assert removed > 0  # ✅ Fix: Check that at least one session was pruned
-
-        # After pruning, no sessions should remain
-        sessions_after = manager.retrieve_sessions(session_id="sess1")
-        assert len(sessions_after) == 0
+        assert removed == len(test_sessions)  # Should remove all test sessions
+        
+        # Verify all sessions were pruned
+        remaining = manager.retrieve_sessions()
+        assert len(remaining) == 0
 
 
 def test_semantic_manager():

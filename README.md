@@ -4,7 +4,7 @@
 
 ![Version](https://img.shields.io/badge/version-v3.0--Sentience--Ascension-blue.svg)
 ![CI/CD](https://github.com/priyanshumishra610/OMNIMIND/actions/workflows/release.yml/badge.svg)
-![Tests](https://img.shields.io/badge/Tests-94%20Passed-success)
+![Tests](https://img.shields.io/badge/Tests-142%20Passed%2C%2010%20Failed-yellow)
 ![Security](https://img.shields.io/badge/OMNI--SHIELD-Active-critical)
 ![Production](https://img.shields.io/badge/Production--Ready-✅-green)
 ![License](https://img.shields.io/badge/License-Apache%202.0-lightgrey)

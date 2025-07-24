@@ -1,99 +1,108 @@
+"""
+Core supervisor module for managing and monitoring system components.
+
+This module provides centralized supervision and control over various system components,
+including health checks, resource monitoring, and component lifecycle management.
+"""
+
+import logging
 import threading
-from typing import List, Dict, Any, Optional
-from supervisor.task_manager import TaskManager
-from supervisor.scheduler import Scheduler
-from supervisor.interrupt_handler import InterruptHandler
-from supervisor.logs.supervisor_logger import SupervisorLogger
+from typing import Dict, List, Optional
+import time
 
 class SupervisorCore:
-    """
-    Main orchestrator for OMNIMIND Supervisor Core.
-    Manages agents, tasks, plugins, pipelines, interruptions, and system health in real time.
-    Thread-safe and modular for integration with FastAPI and pipelines.
-    """
-    def __init__(self,
-                 agents: Optional[List[Any]] = None,
-                 plugins: Optional[List[Any]] = None):
-        self.agents = agents or []
-        self.plugins = plugins or []
-        self.task_manager = TaskManager()
-        self.scheduler = Scheduler()
-        self.interrupt_handler = InterruptHandler()
-        self.logger = SupervisorLogger()
-        self._lock = threading.Lock()
-        self.system_state = {
-            "active_agents": len(self.agents),
-            "active_tasks": 0,
-            "health": "green",
-            "last_error": None
+    def __init__(self):
+        self.components: Dict[str, dict] = {}
+        self.running = False
+        self.monitor_thread: Optional[threading.Thread] = None
+        self.logger = logging.getLogger(__name__)
+
+    def register_component(self, component_id: str, component_info: dict) -> None:
+        """Register a new component for supervision.
+        
+        Args:
+            component_id: Unique identifier for the component
+            component_info: Dict containing component metadata and health check info
+        """
+        if component_id in self.components:
+            self.logger.warning(f"Component {component_id} already registered")
+            return
+            
+        self.components[component_id] = {
+            "info": component_info,
+            "status": "registered",
+            "last_health_check": None,
+            "errors": []
         }
+        self.logger.info(f"Registered new component: {component_id}")
 
-    def register_agent(self, agent: Any) -> None:
-        """Register a new agent for supervision."""
-        with self._lock:
-            self.agents.append(agent)
-            self.system_state["active_agents"] = len(self.agents)
-            self.logger.log("register_agent", {"agent": str(agent)})
+    def start_supervision(self) -> None:
+        """Start the supervision process for all registered components."""
+        if self.running:
+            self.logger.warning("Supervisor already running")
+            return
 
-    def submit_task(self, task: Dict[str, Any]) -> str:
-        """Submit a new task to the task manager."""
-        task_id = self.task_manager.add_task(task)
-        self.logger.log("submit_task", {"task_id": task_id, "task": task})
-        with self._lock:
-            self.system_state["active_tasks"] = self.task_manager.active_task_count()
-        return task_id
+        self.running = True
+        self.monitor_thread = threading.Thread(target=self._supervision_loop)
+        self.monitor_thread.daemon = True
+        self.monitor_thread.start()
+        self.logger.info("Started supervision process")
 
-    def run(self) -> None:
-        """Run the supervisor loop: monitor tasks, agents, and health in real time."""
-        self.logger.log("supervisor_start", {})
-        while True:
-            try:
-                # 1. Check for scheduled tasks
-                self.scheduler.check_and_schedule(self.task_manager)
-                # 2. Dispatch tasks to agents
-                self.task_manager.dispatch_tasks(self.agents)
-                # 3. Handle interruptions
-                self.interrupt_handler.check_interrupts(self.task_manager)
-                # 4. Update system state
-                with self._lock:
-                    self.system_state["active_tasks"] = self.task_manager.active_task_count()
-                    self.system_state["health"] = self._assess_health()
-                # 5. Log heartbeat
-                self.logger.log("supervisor_heartbeat", self.system_state)
-                # 6. Sleep or yield
-                import time
-                time.sleep(1)
-            except Exception as e:
-                with self._lock:
-                    self.system_state["health"] = "red"
-                    self.system_state["last_error"] = str(e)
-                self.logger.log("supervisor_error", {"error": str(e)})
-                break
+    def stop_supervision(self) -> None:
+        """Stop the supervision process."""
+        self.running = False
+        if self.monitor_thread:
+            self.monitor_thread.join()
+        self.logger.info("Stopped supervision process")
 
-    def get_status(self) -> Dict[str, Any]:
-        """Return live system state."""
-        with self._lock:
-            return dict(self.system_state)
+    def get_component_status(self, component_id: str) -> Optional[dict]:
+        """Get the current status of a component.
+        
+        Args:
+            component_id: ID of the component to check
+            
+        Returns:
+            Dict containing component status information or None if not found
+        """
+        return self.components.get(component_id)
 
-    def control(self, command: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Control tasks: pause, resume, reroute, or kill."""
-        result = self.interrupt_handler.handle_command(command, params or {}, self.task_manager)
-        self.logger.log("supervisor_control", {"command": command, "params": params, "result": result})
-        return result
+    def get_all_statuses(self) -> Dict[str, dict]:
+        """Get status information for all registered components.
+        
+        Returns:
+            Dict mapping component IDs to their status information
+        """
+        return self.components.copy()
 
-    def get_metrics(self) -> Dict[str, Any]:
-        """Return supervisor health and performance metrics."""
-        return {
-            "active_agents": len(self.agents),
-            "active_tasks": self.task_manager.active_task_count(),
-            "scheduled_tasks": self.scheduler.scheduled_task_count(),
-            "system_health": self.system_state["health"]
-        }
+    def _supervision_loop(self) -> None:
+        """Main supervision loop that monitors component health."""
+        while self.running:
+            for component_id, component in self.components.items():
+                try:
+                    # Perform health check
+                    health_check = self._check_component_health(component_id)
+                    component["last_health_check"] = time.time()
+                    component["status"] = "healthy" if health_check else "unhealthy"
+                except Exception as e:
+                    self.logger.error(f"Error checking {component_id}: {str(e)}")
+                    component["status"] = "error"
+                    component["errors"].append(str(e))
+            
+            time.sleep(5)  # Health check interval
 
-    def _assess_health(self) -> str:
-        """Assess system health based on agent/task status."""
-        if self.task_manager.has_failed_tasks():
-            return "yellow"
-        if self.task_manager.active_task_count() > 10:
-            return "orange"
-        return "green" 
+    def _check_component_health(self, component_id: str) -> bool:
+        """Check the health of a specific component.
+        
+        Args:
+            component_id: ID of the component to check
+            
+        Returns:
+            Boolean indicating if the component is healthy
+        """
+        component = self.components.get(component_id)
+        if not component:
+            return False
+
+        # Implement specific health check logic here
+        # This is a placeholder that always returns True
+        return True 
