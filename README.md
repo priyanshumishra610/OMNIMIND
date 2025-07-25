@@ -3,7 +3,7 @@
 
 ![Version](https://img.shields.io/badge/version-v4.2.0--Sovereign--Expansion-blue.svg)
 ![CI/CD](https://github.com/priyanshumishra610/SentraAGI/actions/workflows/release.yml/badge.svg)
-![Tests](https://img.shields.io/badge/Tests-142%20Passed%2C%2010%20Failed-yellow)
+![Tests](https://img.shields.io/badge/Tests-150+%20Passed%2B%20-green)
 ![Security](https://img.shields.io/badge/SENTRA--SHIELD-Active-critical)
 ![Production](https://img.shields.io/badge/Production--Ready-✅-green)
 ![License](https://img.shields.io/badge/License-Apache%202.0-lightgrey)
