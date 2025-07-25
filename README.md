@@ -1,12 +1,13 @@
 # 🜂 **SentraAGI — Beyond Guardianship — Synthetic Cognition Unleashed**
 > *Industry-Ready • Enterprise-Deployable • AGI Seed*
 
-![Version](https://img.shields.io/badge/version-v4.2.0--Sovereign--Expansion-blue.svg)
+![Version](https://img.shields.io/badge/%20Version-v4.2.0--Sovereign--Expansion-blue)
 ![CI/CD](https://github.com/priyanshumishra610/SentraAGI/actions/workflows/release.yml/badge.svg)
-![Tests](https://img.shields.io/badge/Tests-142%20Passed%2C%2010%20Failed-yellow)
-![Security](https://img.shields.io/badge/SENTRA--SHIELD-Active-critical)
-![Production](https://img.shields.io/badge/Production--Ready-✅-green)
-![License](https://img.shields.io/badge/License-Apache%202.0-lightgrey)
+![✅ Tests](https://img.shields.io/badge/%20Tests-150%2B%20Passed-brightgreen)
+![🛡️ Security](https://img.shields.io/badge/🛡️%20SENTRA--SHIELD-Active-critical)
+![🚦 Production](https://img.shields.io/badge/%20Production--Ready-Yes-green)
+![📜 License](https://img.shields.io/badge/📜%20License-Apache%202.0-lightgrey)
+
 
 ---
 
@@ -97,7 +98,7 @@ graph TD
 
 ## ✅ **Engineering Receipts**
 
-✔ **100+ Tests Passed** — All core & swarm pipelines verified.
+✔ **150+ Tests Passed** — All core & swarm pipelines verified.
 
 ✔ **CI/CD Live** — Auto-builds, auto-tests, auto-releases.
 
