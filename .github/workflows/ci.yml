@@ -16,13 +16,93 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: "3.11"
+        python-version: "3.10"
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev libgomp1
+
+    - name: Debug Environment
+      run: |
+        echo "=== Python Version ==="
+        python --version
+        echo "=== Python Path ==="
+        which python
+        echo "=== Directory Structure ==="
+        ls -la
+        echo "=== Package Structure ==="
+        find . -name "__init__.py" | head -10
+        echo "=== Environment Variables (Safe) ==="
+        env | grep -v -i "key\|secret\|password\|token" | sort
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov flake8 evidently[report]
+        echo "=== Installed Packages ==="
+        pip freeze
+
+    - name: Create Directories
+      run: |
+        mkdir -p data logs models checkpoints data/perceptual_memory data/chroma
+
+    - name: Set up Environment Variables
+      run: |
+        # Create .env file for CI
+        cat > .env << EOF
+        # CI Environment Variables
+        DEBUG=True
+        LOG_LEVEL=INFO
+        DATA_DIR=./data
+        MODELS_DIR=./models
+        CHECKPOINTS_DIR=./checkpoints
+        
+        # Phase 19 - Synthetic Perception Expansion
+        SENTRA_OPENCV_DEVICE=0
+        SENTRA_VISION_PROCESSING_DURATION=30
+        SENTRA_YOLO_MODEL=yolov8n.pt
+        SENTRA_SAM_MODEL=sam_vit_h_4b8939.pth
+        SENTRA_CLIP_MODEL=ViT-B/32
+        SENTRA_PERCEPTUAL_MEMORY_PATH=data/perceptual_memory
+        SENTRA_PERCEPTUAL_MEMORY_MAX_ENTRIES=10000
+        SENTRA_PERCEPTUAL_MEMORY_PERSIST=true
+        
+        # Phase 20 - Sovereign Singularity Core
+        SENTRA_REFLECTION_THRESHOLD=0.8
+        SENTRA_MORAL_HORIZON=0.7
+        SENTRA_ONTOLOGY_PATH=belief_graph.json
+        SENTRA_SWARM_SIZE=7
+        SENTRA_IMMUTABLE_LOG_PATH=logs/immutable_trace.log
+        
+        # Phase 21: The Final Sovereign Trials
+        SENTRA_LEDGER_PATH=data/immutable_ledger.json
+        SENTRA_AUDIT_INTERVAL=300
+        SENTRA_FORGETTING_THRESHOLD=0.7
+        SENTRA_OVERSIGHT_QUORUM_SIZE=3
+        SENTRA_SWARM_HEARTBEAT_INTERVAL=5
+        SENTRA_PROOF_PATH=data/proof_of_continuity.json
+        SENTRA_EMERGENCY_SHUTDOWN_ENABLED=true
+        EOF
+
+    - name: Verify Dependencies
+      run: |
+        pip check
+        python -c "import cv2; print('OpenCV version:', cv2.__version__)"
+        python -c "import numpy; print('NumPy version:', numpy.__version__)"
+        python -c "import pandas; print('Pandas version:', pandas.__version__)"
+        python -c "import pytest; print('Pytest version:', pytest.__version__)"
+
+    - name: Test Import Verification
+      run: |
+        echo "=== Testing Key Imports ==="
+        python -c "from supervisor.supervisor_logger import SupervisorLogger; print('✓ SupervisorLogger')"
+        python -c "from memory.perceptual_memory import PerceptualMemory; print('✓ PerceptualMemory')"
+        python -c "from governance.oversight_console import OversightConsole; print('✓ OversightConsole')"
+        python -c "from proof.proof_of_continuity import ProofOfContinuity; print('✓ ProofOfContinuity')"
+        python -c "from multi_modal.vision_agent import VisionAgent; print('✓ VisionAgent')"
+        python -c "from arena.distributed_swarm import DistributedSwarm; print('✓ DistributedSwarm')"
 
     - name: Lint
       run: |
@@ -31,7 +111,18 @@ jobs:
 
     - name: Run tests with coverage
       run: |
-        pytest tests/ -v --cov=. --cov-report=xml
+        pytest tests/ -v --cov=. --cov-report=xml --cov-fail-under=70
+
+    - name: Debug Individual Tests (if main test fails)
+      if: failure()
+      run: |
+        echo "=== Running Individual Tests for Debug ==="
+        pytest tests/test_phase7.py -v
+        pytest tests/test_final_trials.py -v
+        pytest tests/test_oversight_console.py -v
+        pytest tests/test_perceptual_memory.py -v
+        pytest tests/test_proof_of_continuity.py -v
+        pytest tests/test_vision_agent.py -v
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
