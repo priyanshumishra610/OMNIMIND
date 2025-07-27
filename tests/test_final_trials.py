@@ -10,7 +10,7 @@ import time
 from immutable.ledger import ImmutableLedger
 from pipelines.ledger_pipeline import LedgerPipeline
 from omega.self_audit import SelfAudit
-from memory.forgetter import Forgetter
+from memory.forgetter import Forgetter, ForgettingReceipt
 from governance.oversight_console import OversightConsole
 from pipelines.oversight_pipeline import OversightPipeline
 from arena.distributed_swarm import DistributedSwarm
@@ -99,7 +99,8 @@ class TestFinalTrialsIntegration:
         """Test OversightPipeline integration."""
         with tempfile.TemporaryDirectory() as tmpdir:
             ledger_path = os.path.join(tmpdir, "oversight_pipeline_ledger.json")
-            pipeline = OversightPipeline(ledger_path)
+            ledger_pipeline = LedgerPipeline(ledger_path)
+            pipeline = OversightPipeline(ledger_pipeline)
             
             # Register dummy hooks
             def dummy_hook():

@@ -42,6 +42,7 @@ class OversightConsole:
         self.actions_log = []
         self.quorum_votes = {}
         self.emergency_mode = False
+        self._vote_counter = 0
         logger.info("OversightConsole initialized")
 
     def inspect(self, target: str, details: Dict[str, Any] = None) -> Dict[str, Any]:
@@ -165,7 +166,8 @@ class OversightConsole:
 
     def create_quorum_vote(self, change_description: str, required_votes: int = 3) -> str:
         """Create a new quorum vote for a dangerous change."""
-        vote_id = f"vote_{int(time.time())}"
+        self._vote_counter += 1
+        vote_id = f"vote_{int(time.time())}_{self._vote_counter}"
         
         vote = QuorumVote(
             vote_id=vote_id,

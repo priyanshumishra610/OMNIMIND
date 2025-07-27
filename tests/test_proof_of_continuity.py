@@ -18,7 +18,7 @@ class TestProofOfContinuity:
             proof_path = os.path.join(tmpdir, "test_proof.json")
             proof_gen = ProofOfContinuity(proof_path)
             
-            assert proof_gen.proof_path == proof_path
+            assert str(proof_gen.proof_path) == proof_path
             assert len(proof_gen.entries) == 0
             assert proof_gen.genesis_hash == "0" * 64
 
@@ -218,7 +218,7 @@ class TestProofOfContinuity:
             
             # Generate proof
             proof = proof_gen.generate_proof()
-            assert proof.total_phases == 3  # Phase 1, 19, 20, 21 (unique phases)
+            assert proof.total_phases == 4  # Phase 1, 19, 20, 21 (unique phases)
             assert proof.total_mutations == 4  # All except rollback
             assert proof.total_rollbacks == 1  # Only rollback
             assert proof.chain_integrity == True

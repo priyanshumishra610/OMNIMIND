@@ -116,7 +116,7 @@ class TestVisionAgent:
         assert isinstance(recent, list)
         assert len(recent) == 0
     
-    @patch('multi_modal.virtual_senses.VirtualSenses')
+    @patch('multi_modal.vision_agent.VirtualSenses')
     def test_vision_agent_process_single_frame_no_frame(self, mock_virtual_senses):
         """Test processing when no frame is available."""
         # Mock virtual senses to return None for frame
@@ -129,7 +129,7 @@ class TestVisionAgent:
         
         assert result is None
     
-    @patch('multi_modal.virtual_senses.VirtualSenses')
+    @patch('multi_modal.vision_agent.VirtualSenses')
     def test_vision_agent_process_single_frame_with_frame(self, mock_virtual_senses):
         """Test processing with a dummy frame."""
         # Create dummy frame
@@ -147,8 +147,13 @@ class TestVisionAgent:
         }
         mock_virtual_senses.return_value = mock_vs_instance
         
+        # Create agent after setting up the mock
         agent = VisionAgent()
         result = agent.process_single_frame()
+        
+        # Verify the mock was called
+        mock_vs_instance.capture_frame.assert_called_once()
+        mock_vs_instance.process_frame.assert_called_once_with(dummy_frame, ['person', 'car', 'building', 'object'])
         
         assert result is not None
         assert 'timestamp' in result

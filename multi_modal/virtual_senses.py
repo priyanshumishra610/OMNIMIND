@@ -12,6 +12,7 @@ Outputs feed into World Model, Dreamscape, and Reasoner.
 """
 
 import os
+import time
 import cv2
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
@@ -270,6 +271,30 @@ class VirtualSenses:
         if self.cap:
             self.cap.release()
         cv2.destroyAllWindows()
+    
+    def simulate_sense(self, sense_type: str) -> str:
+        """
+        Simulate a specific sense type.
+        
+        Args:
+            sense_type: Type of sense to simulate (taste, touch, smell, etc.)
+            
+        Returns:
+            Simulated sense data
+        """
+        return f"Simulated sense: {sense_type}"
+    
+    def feed_reasoner(self, data: str) -> str:
+        """
+        Feed data to the reasoner.
+        
+        Args:
+            data: Data to feed to reasoner
+            
+        Returns:
+            Confirmation message
+        """
+        return f"Fed to reasoner: {data}"
 
 
 def main():

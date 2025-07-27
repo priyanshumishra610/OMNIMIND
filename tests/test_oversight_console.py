@@ -203,7 +203,7 @@ class TestOversightConsole:
         # Get final stats
         stats = console.get_oversight_stats()
         
-        assert stats["total_actions"] == 4  # 3 inspects + 1 shutdown
+        assert stats["total_actions"] == 9  # 3 inspects + 1 shutdown + 5 approve_change calls
         assert stats["emergency_mode"] == True
         assert stats["pending_votes"] == 0  # Both votes completed
         

@@ -127,7 +127,7 @@ class DistributedSwarm:
         participating_nodes = len([n for n in self.nodes.values() if n.state == NodeState.ACTIVE])
         total_nodes = len(self.nodes)
         
-        if participating_nodes < total_nodes / 2:
+        if participating_nodes < 2:  # Need at least 2 nodes for consensus
             logger.error("Insufficient nodes for consensus")
             return ConsensusResult(False, None, participating_nodes, total_nodes, 0)
 

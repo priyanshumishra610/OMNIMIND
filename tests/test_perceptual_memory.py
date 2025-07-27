@@ -126,6 +126,7 @@ class TestPerceptualMemory:
     def test_perceptual_memory_get_perceptions_by_object(self):
         """Test retrieving perceptions by object."""
         memory = PerceptualMemory()
+        memory.clear_memory()  # Clear any existing data
         
         # Store perceptions with different objects
         perception_data_1 = {
@@ -191,6 +192,7 @@ class TestPerceptualMemory:
     def test_perceptual_memory_get_perceptions_by_concept(self):
         """Test retrieving perceptions by concept similarity."""
         memory = PerceptualMemory()
+        memory.clear_memory()  # Clear any existing data
         
         # Store perception with concept similarities
         perception_data = {
@@ -237,6 +239,7 @@ class TestPerceptualMemory:
     def test_perceptual_memory_get_memory_summary(self):
         """Test getting memory summary."""
         memory = PerceptualMemory()
+        memory.clear_memory()  # Clear any existing data
         
         # Store some perceptions
         perception_data = {
